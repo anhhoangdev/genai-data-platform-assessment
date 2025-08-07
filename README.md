@@ -2,7 +2,7 @@
 
 **Author:** Tran Hoang Anh  
 **Position Applied:** Data Engineer / Infra Engineer  
-**Assessment Duration:** August 7–12, 2025  
+**Assessment Duration:** August 8–13, 2025  
 **GitHub Repo:** [github.com/anhhoangdev/genai-data-platform-assessment](https://github.com/anhhoangdev/genai-data-platform-assessment)
 
 ---

@@ -1,0 +1,311 @@
+---
+description: "Multi-file report templates for A01, A02, B01 conforming to ctx_doc_style"
+alwaysApply: false
+tags: [templates, scaffolds, reports, multifile]
+---
+
+# Multi-File Report Scaffolds
+
+## File Structure per Task
+
+### A01 - GCP Infrastructure (Multi-Part)
+```
+docs/reports/A01/
+├── report_A01.md                    # Main overview (300-500 lines)
+├── report_A01_part01_architecture.md # Architecture design (400-600 lines) 
+├── report_A01_part02_deployment.md   # Deployment procedures (400-600 lines)
+├── report_A01_part03_operations.md   # Operations & monitoring (300-400 lines)
+├── report_A01_prompt.md             # Main prompt log
+├── report_A01_part01_prompt.md      # Architecture-specific prompts
+└── report_A01_diagram.md            # Mermaid diagrams
+```
+
+### A02 - Dask Cluster (Multi-Part)
+```
+docs/reports/A02/
+├── report_A02.md                    # Main overview
+├── report_A02_part01_architecture.md # Dask cluster design
+├── report_A02_part02_integration.md  # A01 platform integration
+├── report_A02_part03_performance.md  # Performance & scaling
+├── report_A02_prompt.md             # Prompt engineering log
+└── report_A02_diagram.md            # Architecture diagrams
+```
+
+### B01 - Vector Database Tutorial (Multi-Part)
+```
+docs/reports/B01/
+├── report_B01.md                    # Tutorial overview
+├── report_B01_part01_concepts.md    # Fundamentals & theory
+├── report_B01_part02_tools.md       # Tool comparison
+├── report_B01_part03_implementation.md # Hands-on examples
+├── report_B01_prompt.md             # Research & content prompts
+└── report_B01_diagram.md            # Concept diagrams
+```
+
+## Template: Main Report File
+
+```markdown
+---
+title: report_A01
+---
+
+# A01 - GCP Data Platform Foundation
+
+---
+## Executive Summary
+---
+## Architecture Overview
+---
+## Implementation Phases
+---
+## Resource Requirements
+---
+## Timeline & Milestones
+---
+## Risk Assessment
+---
+## References
+---
+
+### Executive Summary
+<details>
+<summary>Platform overview, scope, and business value</summary>
+
+---
+- **Objective**: Enterprise-grade GCP data platform for 20-30 engineers
+- **Key Components**: IAM, VPC, GKE, FreeIPA, NFS shared storage
+- **Delivery Timeline**: [X] weeks with phased rollout
+- **Business Value**: Scalable foundation for data engineering workflows
+---
+
+#### Related Documents
+- Architecture details: `report_A01_part01_architecture.md`
+- Deployment guide: `report_A01_part02_deployment.md`
+- Operations manual: `report_A01_part03_operations.md`
+- Architecture diagrams: `report_A01_diagram.md`
+---
+
+</details>
+```
+
+## Template: Architecture Part
+
+```markdown
+---
+title: report_A01_part01_architecture
+---
+
+# A01 Part 1 - Architecture Design
+
+---
+## Infrastructure Components
+---
+## Network Architecture
+---
+## Security Model
+---
+## Integration Patterns
+---
+## Scalability Design
+---
+
+### Infrastructure Components
+<details>
+<summary>Detailed component specifications and relationships</summary>
+
+---
+- **VPC Design**: Network topology and subnet allocation
+- **IAM Structure**: Role-based access control matrix
+- **GKE Configuration**: Kubernetes cluster specifications
+- **FreeIPA Setup**: Centralized authentication architecture
+- **NFS Storage**: Shared filesystem design and capacity planning
+---
+
+#### Cross-References
+- Main report: `report_A01.md`
+- Deployment procedures: `report_A01_part02_deployment.md`
+- Operations guide: `report_A01_part03_operations.md`
+- GenAI usage: `../../../prompt_logs/prompt_A01_part01_architecture.md`
+---
+
+</details>
+```
+
+## Template: Deployment Part
+
+```markdown
+---
+title: report_A01_part02_deployment
+---
+
+# A01 Part 2 - Deployment Procedures
+
+---
+## Prerequisites
+---
+## Terraform Modules
+---
+## Ansible Playbooks
+---
+## Deployment Sequence
+---
+## Validation Steps
+---
+## Rollback Procedures
+---
+
+### Prerequisites
+<details>
+<summary>Pre-deployment requirements and setup</summary>
+
+---
+- **GCP Project Setup**: Project creation and billing configuration
+- **Service Accounts**: Required service accounts and permissions
+- **Terraform Backend**: Remote state configuration
+- **Local Environment**: Required tools and versions
+---
+
+#### Deployment Sequence
+  ```terraform
+  # Step 1: Network infrastructure
+  cd terraform/modules/vpc
+  terraform apply
+  
+  # Step 2: IAM and security
+  cd ../iam
+  terraform apply
+  
+  # Step 3: Compute resources
+  cd ../gke
+  terraform apply
+  ```
+---
+
+</details>
+```
+
+## Template: Prompt Engineering Log
+
+```markdown
+---
+title: report_A01_prompt
+---
+
+# A01 - GenAI Prompt Engineering Log
+
+### Strategic GenAI Usage
+<details>
+<summary>High-level prompt strategy and workflow</summary>
+
+---
+- **Planning Phase**: Architecture design and component selection prompts
+- **Implementation Phase**: Terraform module generation and Ansible role creation
+- **Documentation Phase**: Technical writing and diagram generation
+- **Validation Phase**: Review and quality assurance prompts
+---
+
+#### Prompt Categories
+- **Research Prompts**: "Compare GCP IAM vs traditional LDAP for data platform"
+- **Architecture Prompts**: "Design VPC topology for multi-tenant data platform"
+- **Code Generation**: "Generate Terraform module for GKE with autoscaling"
+- **Documentation**: "Create deployment timeline with dependencies"
+---
+
+</details>
+
+### Detailed Prompt History
+<details>
+<summary>Chronological prompt log with rationale</summary>
+
+---
+
+#### Phase 1: Architecture Research
+- **Prompt**: "Design enterprise GCP data platform architecture for 20-30 users with FreeIPA integration"
+- **Tool Used**: Claude 3.5 Sonnet
+- **Output Quality**: ★★★★☆ 
+- **Accepted/Rejected**: Accepted network design; refined IAM approach
+- **Follow-up**: "Optimize IAM roles for principle of least privilege"
+
+#### Phase 2: Infrastructure Code
+- **Prompt**: "Generate modular Terraform for GCP VPC with data engineering subnets"
+- **Tool Used**: Cursor
+- **Output Quality**: ★★★★★
+- **Accepted/Rejected**: Accepted with minor variable adjustments
+- **Follow-up**: "Add validation rules and output descriptions"
+
+---
+
+</details>
+```
+
+## Template: Diagram File
+
+```markdown
+---
+title: report_A01_diagram
+---
+
+# A01 - Architecture Diagrams
+
+### Infrastructure Overview
+<details>
+<summary>High-level system architecture</summary>
+
+---
+  ```mermaid
+  graph TB
+      subgraph "GCP Project"
+          VPC[VPC Network]
+          GKE[GKE Cluster]
+          CE[Compute Engine - FreeIPA]
+          NFS[NFS Server]
+      end
+      
+      subgraph "Users"
+          DE[Data Engineers]
+          ML[ML Engineers]
+      end
+      
+      DE --> GKE
+      ML --> GKE
+      GKE --> NFS
+      CE --> GKE
+      
+      VPC --> GKE
+      VPC --> CE
+      VPC --> NFS
+  ```
+---
+
+</details>
+
+### Network Topology
+<details>
+<summary>Detailed network architecture</summary>
+
+---
+  ```mermaid
+  graph LR
+      subgraph "VPC: data-platform"
+          subgraph "Subnet: management"
+              IPA[FreeIPA Server<br/>10.0.1.0/24]
+          end
+          
+          subgraph "Subnet: compute"
+              GKE_NODES[GKE Nodes<br/>10.0.2.0/24]
+          end
+          
+          subgraph "Subnet: storage" 
+              NFS_SRV[NFS Server<br/>10.0.3.0/24]
+          end
+      end
+      
+      INTERNET[Internet] --> LB[Load Balancer]
+      LB --> GKE_NODES
+      GKE_NODES --> IPA
+      GKE_NODES --> NFS_SRV
+  ```
+---
+
+</details>
+```

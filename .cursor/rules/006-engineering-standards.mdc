@@ -1,0 +1,133 @@
+---
+description: "Engineering standards for Terraform, Ansible, and documentation code"
+globs: ["*.tf", "*.yml", "*.yaml", "docs/**/*.md"]
+alwaysApply: true
+tags: [terraform, ansible, infrastructure, standards]
+---
+
+# Engineering Standards
+
+## Terraform Standards
+
+### Module Structure
+- **Module-first approach**: Separate reusable modules in `terraform/modules/`
+- **Environment overlays**: `terraform/envs/{dev,stg,prod}/` with module calls
+- **Required files per module**: `main.tf`, `variables.tf`, `outputs.tf`, `README.md`
+- **Backend configuration**: Separate `backend.tf` for remote state
+
+### Code Quality
+- **Typed variables**: Always specify variable types and descriptions
+- **Explicit outputs**: Define useful outputs for module consumers  
+- **No hardcoded values**: Parameterize project IDs, regions, sizes via variables
+- **Resource naming**: Use consistent naming conventions with environment prefixes
+
+### Example Module Structure
+```hcl
+# variables.tf
+variable "project_id" {
+  description = "GCP project ID"
+  type        = string
+}
+
+variable "region" {
+  description = "GCP region"
+  type        = string
+  default     = "us-central1"
+}
+
+# outputs.tf
+output "vpc_id" {
+  description = "VPC network ID"
+  value       = google_compute_network.vpc.id
+}
+```
+
+## Ansible Standards
+
+### Organization
+- **Role-based**: Prefer roles over monolithic playbooks
+- **Inventory per environment**: Separate inventories for dev/stg/prod
+- **Group variables**: Use `group_vars/` and `host_vars/` appropriately
+- **Idempotent tasks**: All tasks must be idempotent and safe to re-run
+
+### Playbook Structure
+- **Handlers for restarts**: Use handlers for service restarts/reloads
+- **Task names**: Descriptive task names that explain the action
+- **Tags**: Tag tasks for selective execution
+- **Variables**: Group related variables logically
+
+### Example Role Structure
+```yaml
+# roles/freeipa/tasks/main.yml
+- name: Install FreeIPA server packages
+  package:
+    name: "{{ freeipa_packages }}"
+    state: present
+  tags: [packages, freeipa]
+
+- name: Configure FreeIPA server
+  template:
+    src: ipa-server-install.j2
+    dest: /tmp/ipa-server-install.sh
+    mode: '0755'
+  notify: restart freeipa
+  tags: [config, freeipa]
+```
+
+## Documentation Code Standards
+
+### Code Blocks in Reports
+- **Language specification**: Always specify language in fenced code blocks
+- **Runnable examples**: Provide realistic, functional code examples
+- **Proper indentation**: Indent block elements 2 spaces under bullet parents
+
+### Examples in Documentation
+```terraform
+# Good: Realistic module call
+module "vpc" {
+  source = "./modules/vpc"
+  
+  project_id = var.project_id
+  region     = var.region
+  
+  subnets = {
+    data = {
+      cidr_range = "10.0.1.0/24"
+      region     = var.region
+    }
+  }
+}
+```
+
+```yaml
+# Good: Realistic Ansible task
+- name: Configure Dask scheduler
+  template:
+    src: dask-scheduler.service.j2
+    dest: /etc/systemd/system/dask-scheduler.service
+  notify: 
+    - reload systemd
+    - restart dask-scheduler
+```
+
+## Quality Checklist
+
+### Terraform Code
+- [ ] Variables have types and descriptions
+- [ ] Outputs are documented and useful
+- [ ] No hardcoded project/region values
+- [ ] Module structure follows conventions
+- [ ] Backend configuration separated
+
+### Ansible Code  
+- [ ] Tasks are idempotent
+- [ ] Handlers used for service management
+- [ ] Variables organized logically
+- [ ] Role structure follows best practices
+- [ ] Tags applied consistently
+
+### Documentation Code
+- [ ] Code blocks specify language
+- [ ] Examples are realistic and functional
+- [ ] Proper indentation under bullets
+- [ ] No placeholder/dummy values

@@ -1,0 +1,98 @@
+---
+description: "Enforce ctx_doc_style formatting for reports and major documentation"
+globs: ["docs/**/*.md", "*.md"]
+alwaysApply: true
+tags: [documentation, style, formatting]
+---
+
+# Documentation Style Enforcement
+
+## Core Requirements
+
+### YAML Front Matter
+- **Required** for all reports and major docs
+- Format: `title: document_name_in_snake_case`
+
+### Section Structure
+- **Main sections (##)**: Use `---` separators before and after; NO content directly under `##`
+- **Subsections (###)**: Must contain **at most one** `<details><summary>` block with all content
+- **Subsubsections (####)**: Only exist inside details blocks; separated by `---`
+
+### Content Format
+- **All content as bullet points** - break paragraphs into focused bullets
+- **One concept per bullet point**
+- **No numbered lists** - use descriptive headings and bullets only
+
+### Block Element Rules
+- **Code blocks, tables, Mermaid charts**: Indent 2 spaces under parent bullet
+- **Fenced code blocks**: Must specify language (```yaml, ```terraform, etc.)
+- **Technical symbols**: Wrap in backticks (`<0.2%`, `$800K`)
+
+## Style Checklist
+
+Before saving any report or major documentation:
+
+- [ ] YAML front matter present with snake_case title
+- [ ] `##` sections separated by `---`, no direct content below
+- [ ] Each `###` has single details block with `---` at start and end
+- [ ] `####` sections only inside details, separated by `---`
+- [ ] All content bulleted; no numbered lists
+- [ ] Block elements indented 2 spaces under bullets
+- [ ] Code fences specify language; symbols in backticks
+
+## Template Structure
+
+```markdown
+---
+title: document_name
+---
+
+---
+## Main Section A
+---
+## Main Section B
+---
+
+### Subsection A
+<details>
+<summary>Descriptive summary text</summary>
+
+---
+- Bullet content here
+- More bullets
+
+#### Subsubsection
+- Specific content
+
+---
+
+#### Another Subsubsection  
+- More specific content
+
+---
+
+</details>
+```
+
+## Multi-File Report Guidelines
+
+### Cross-Referencing Between Parts
+- **Use relative file references**: `report_A01_part01_architecture.md`
+- **Include navigation sections**: "Related Documents" in details blocks
+- **Maintain consistent terminology**: Create glossary in main report file
+- **Link diagrams explicitly**: Reference specific diagram sections
+
+### File Organization Standards
+- **Main report**: Overview, executive summary, cross-references
+- **Part files**: Focused technical content (400-600 lines each)
+- **Prompt files**: Document GenAI usage and decision rationale  
+- **Diagram files**: Centralized Mermaid charts with proper sectioning
+
+### Consistency Across Files
+- **Identical YAML frontmatter format**: All files use snake_case titles
+- **Consistent section structure**: Follow `---` separator rules in all files
+- **Unified terminology**: Use same technical terms across all parts
+- **Cross-file validation**: Ensure references between files are accurate
+
+## Reference
+- Full style guide: `docs/ctx_doc_style.md`

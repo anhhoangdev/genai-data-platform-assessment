@@ -1,15 +1,29 @@
 # Progress
 
-- Status: A01 Phase-0 Foundation COMPLETED - ready for Phase-1 VMs and documentation
+- Status: A01 PHASE-1 IMPLEMENTATION COMPLETED + Production Hardening Applied ✅
 - Completed: 
   - Proper .mdc Cursor rules configuration
   - Multi-file report structure (docs/reports/A01/, A02/, B01/)
   - Centralized prompt_logs/ directory with templates
   - Updated README.md with comprehensive structure documentation
-  - **A01 Phase-0 Terraform Infrastructure:**
+  - **A01 Phase-0 Terraform Infrastructure (COMPLETED):**
     - Complete modular Terraform structure (APIs, IAM, WIF, KMS, Secrets, Network)
     - Security-first design: no service account keys, CMEK encryption, deny-by-default firewall
     - GitHub Actions workflow with Workload Identity Federation
     - Comprehensive documentation with Mermaid diagrams
     - Production-ready foundation for Phase-1 deployment
-- Next: A01 Phase-1 (VMs: Bastion, FreeIPA, Workers + Filestore + Ansible) + Architecture documentation
+  - **A01 Phase-1 VM Infrastructure (COMPLETED):**
+    - Bastion VM with IAP-only access and IAM bindings
+    - FreeIPA server with automated installation and enrollment user creation
+    - Workstation MIG (3-10 instances) with proper labels and scaling
+    - Filestore NFS (4TB) with proper export structure and bootstrapping
+    - DNS records for all services in private zone
+    - Complete Ansible automation (8 roles, 3 playbooks)
+  - **A01 Production Hardening (COMPLETED):**
+    - IAP tunnel access controls with Google Group authorization
+    - Filestore directory structure automation with proper permissions
+    - NFS autofs configuration with pam_mkhomedir integration
+    - FreeIPA enrollment OTP automation with Secret Manager rotation
+    - Dynamic GCE inventory for workstation targeting
+    - Deterministic IAP tunnel scripts for reliable access
+- Next: A01 Architecture Documentation (enterprise handoff requirements)

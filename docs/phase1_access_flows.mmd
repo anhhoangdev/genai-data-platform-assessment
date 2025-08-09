@@ -1,0 +1,17 @@
+sequenceDiagram
+  participant Dev as Developer
+  participant IAP as IAP
+  participant Bastion as Bastion VM
+  participant WS as Workstation VM
+  participant FS as Filestore
+  participant IPA as FreeIPA
+
+  Dev->>IAP: gcloud compute ssh --tunnel-through-iap bastion
+  IAP->>Bastion: TCP 22
+  Bastion->>WS: SSH ProxyJump (22)
+  Dev->>Bastion: SSH local forward 8080/8888
+  Bastion->>WS: Forward 127.0.0.1:8080/8888
+  WS->>FS: NFS mount /export/home, /export/shared
+  WS->>IPA: Kerberos/LDAP (88/389) auth
+
+

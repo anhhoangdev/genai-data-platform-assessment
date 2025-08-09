@@ -1,0 +1,32 @@
+graph TB
+  subgraph GCP["GCP Project"]
+    VPC[VPC vpc-data-platform]
+    SUB1["subnet-services 10.10.1.0/24"]
+    SUB2["subnet-workloads 10.10.2.0/24"]
+    NAT[Cloud NAT]
+    DNS["Private DNS corp.internal"]
+    BASTION[Bastion VM]
+    IPA[FreeIPA VM]
+    FS["Filestore (NFS)\n/export/home, /export/shared"]
+    MIG["Workstation MIG\nInstance Template + Autoscaler"]
+  end
+
+  INTERNET[Internet]
+  IAP[IAP TCP/SSH]
+
+  VPC --> SUB1
+  VPC --> SUB2
+  VPC --> NAT
+  VPC --> DNS
+
+  SUB1 --> BASTION
+  SUB1 --> IPA
+  SUB2 --> MIG
+  SUB2 --> FS
+
+  IAP --> BASTION
+  BASTION --> MIG
+  MIG --> FS
+  MIG --> IPA
+
+

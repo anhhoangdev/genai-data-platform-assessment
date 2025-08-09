@@ -1,0 +1,14 @@
+plugin: gcp_compute
+projects:
+  - "{{ gcp_project_id }}"
+zones: "{{ gcp_zones | default(['asia-southeast1-a','asia-southeast1-b']) }}"
+filters:
+  - labels.role = workstation
+groups:
+  workstations: "'workstation' in labels.role"
+auth_kind: serviceaccount
+service_account_file: "{{ lookup('env','GOOGLE_APPLICATION_CREDENTIALS') }}"
+compose:
+  ansible_host: networkInterfaces[0].networkIP
+
+

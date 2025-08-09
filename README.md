@@ -117,3 +117,42 @@ GenAI tools were used strategically for:
 - **Documentation prompts**: Technical writing and cross-referencing
 
 ---
+
+## Phase-1 (VM Layer) – Deploy, Configure, Access
+
+### Deploy (Terraform)
+
+```bash
+cd terraform/envs/dev
+terraform init
+terraform apply -var-file=terraform.tfvars
+```
+
+### Configure (Ansible)
+
+Preferred: run from bastion to avoid local IAP ProxyCommand complexity.
+
+```bash
+# SSH to bastion via IAP
+gcloud compute ssh ubuntu@bastion.corp.internal --tunnel-through-iap
+
+# On bastion, run playbooks
+cd /path/to/repo/ansible
+ansible-playbook -i inventories/dev/hosts.ini playbooks/freeipa.yml
+ansible-playbook -i inventories/dev/hosts.ini playbooks/workstation.yml
+```
+
+### Open IDE panels
+
+```bash
+./scripts/iap_tunnel_code.sh    # Open http://localhost:8080
+./scripts/iap_tunnel_jupyter.sh # Open http://localhost:8888
+```
+
+### Troubleshooting
+
+- Ensure SRV records exist in private zone: `_kerberos._udp`, `_kerberos._tcp` (88), `_ldap._tcp` (389) → `ipa.corp.internal.`
+- Verify firewall rules: deny-all first; IAP→bastion 22; bastion→workers 22; FreeIPA ports from services/workloads; HC ranges to workers 22
+- Verify autofs mounts on workstations: `/home/<user>` and `/shared/*`
+- Linger enabled via PAM hook; user units seeded via `/etc/skel/.config/systemd/user/`
+

@@ -171,3 +171,45 @@ resource "google_compute_firewall" "allow_hc_to_workers" {
 }
 
 
+
+# IAP tunnel access for bastion and useful outputs
+variable "iap_tunnel_group" {
+  description = "Google Group permitted to IAP tunnel to bastion"
+  type        = string
+}
+
+variable "bastion_instance_name" {
+  description = "Bastion instance name"
+  type        = string
+}
+
+variable "bastion_zone" {
+  description = "Bastion zone"
+  type        = string
+}
+
+data "google_compute_instance" "bastion" {
+  name    = var.bastion_instance_name
+  zone    = var.bastion_zone
+  project = var.project_id
+}
+
+resource "google_iap_tunnel_instance_iam_member" "bastion_tunnel" {
+  project  = data.google_compute_instance.bastion.project
+  zone     = data.google_compute_instance.bastion.zone
+  instance = data.google_compute_instance.bastion.name
+  role     = "roles/iap.tunnelResourceAccessor"
+  member   = "group:${var.iap_tunnel_group}"
+}
+
+# If workstations use MIG/Template, expose useful outputs
+output "workstation_instance_group" {
+  value       = try(module.workstation_mig.mig_name, null)
+  description = "Workstations regional MIG name (if present)"
+}
+
+output "workstation_template_labels" {
+  value       = null
+  description = "Labels applied to workstation template (if present)"
+}
+

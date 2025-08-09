@@ -1,32 +1,34 @@
 ---
-- name: Ensure autofs is installed
-  apt:
-    name: autofs
+- name: Ensure autofs and PAM packages installed
+  package:
+    name:
+      - autofs
+      - libpam-modules
     state: present
 
-- name: Configure auto.master.d for home and shared
+- name: Configure auto.master.d entries
   copy:
-    dest: "/etc/auto.master.d/{{ item.name }}.autofs"
-    content: "{{ item.content }}\n"
-    mode: '0644'
-  loop:
-    - { name: 'home',   content: '/home /etc/auto.home --timeout=600' }
-    - { name: 'shared', content: '/shared /etc/auto.shared --timeout=600' }
+    dest: /etc/auto.master.d/filestore.autofs
+    content: |
+      /home   /etc/auto.home
+      /shared /etc/auto.shared
+  notify: restart autofs
 
-- name: Configure auto.home map for per-user homes
+- name: Configure auto.home to map per-user homes
   copy:
     dest: /etc/auto.home
-    mode: '0644'
-    content: "* -fstype=nfs4,rw,nosuid,hard,intr {{ filestore_ip }}:/home/&\n"
+    content: |
+      * -rw,soft,intr {{ filestore_ip }}:/export/home/&
+  notify: restart autofs
 
-- name: Configure auto.shared map for shared dirs
+- name: Configure auto.shared
   copy:
     dest: /etc/auto.shared
-    mode: '0644'
     content: |
-      data     -fstype=nfs4,rw,nosuid,hard,intr {{ filestore_ip }}:/shared/data
-      projects -fstype=nfs4,rw,nosuid,hard,intr {{ filestore_ip }}:/shared/projects
-      models   -fstype=nfs4,rw,nosuid,hard,intr {{ filestore_ip }}:/shared/models
+      data     -rw,soft,intr {{ filestore_ip }}:/export/shared/data
+      projects -rw,soft,intr {{ filestore_ip }}:/export/shared/projects
+      models   -rw,soft,intr {{ filestore_ip }}:/export/shared/models
+  notify: restart autofs
 
 - name: Ensure /shared exists
   file:
@@ -34,10 +36,11 @@
     state: directory
     mode: '0755'
 
-- name: Restart autofs
-  service:
-    name: autofs
-    state: restarted
-    enabled: true
-
+- name: Enable pam_mkhomedir for session
+  lineinfile:
+    path: /etc/pam.d/common-session
+    line: 'session required pam_mkhomedir.so skel=/etc/skel/ umask=0022'
+    state: present
+    insertafter: EOF
+  when: ansible_facts.os_family == 'Debian'
 

@@ -42,3 +42,41 @@
     executable: /bin/bash
 
 
+
+- name: Set fact for GCP project ID
+  set_fact:
+    gcp_project_id: "{{ gcp_project.stdout }}"
+  when: gcp_project is defined
+
+- name: Ensure ipa CLI available
+  command: which ipa
+  changed_when: false
+
+- name: Check if enroll user exists
+  command: ipa user-show enroll
+  register: enroll_user
+  failed_when: enroll_user.rc not in [0,1]
+  changed_when: false
+
+- name: Create enroll user when missing
+  command: ipa user-add enroll --first=Enroll --last=User --random
+  when: enroll_user.rc == 1
+
+# Generate or rotate a TOTP token for 'enroll'
+- name: Create TOTP for enroll
+  command: ipa otptoken-add --owner=enroll --type=totp --token-notes="ansible-rotated"
+  register: otp_create
+  changed_when: true
+
+# Extract secret and store as a new Secret Manager version
+- name: Store OTP secret in Secret Manager
+  shell: |
+    set -e
+    SECRET=$(echo "{{ otp_create.stdout }}" | sed -n 's/^ *Secret: *//p' | tr -d '\r')
+    [[ -n "$SECRET" ]]
+    printf "%s" "$SECRET" | gcloud secrets versions add ipa_enrollment_otp --data-file=-
+  environment:
+    CLOUDSDK_CORE_PROJECT: "{{ gcp_project_id }}"
+  args:
+    executable: /bin/bash
+

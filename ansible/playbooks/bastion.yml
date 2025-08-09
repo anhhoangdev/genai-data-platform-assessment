@@ -4,5 +4,6 @@
   become: true
   roles:
     - role: common-base
+    - { role: filestore-bootstrap, tags: ['filestore-bootstrap'] }
 
 

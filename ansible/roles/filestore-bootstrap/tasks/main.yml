@@ -1,0 +1,45 @@
+---
+- name: Ensure NFS client tools present
+  package:
+    name: nfs-common
+    state: present
+
+- name: Create temporary mount point
+  file:
+    path: /mnt/filestore
+    state: directory
+    mode: "0755"
+
+- name: Mount Filestore temporarily
+  mount:
+    path: /mnt/filestore
+    src: "{{ filestore_ip }}:/export"
+    fstype: nfs4
+    opts: "rw,hard,timeo=600,retrans=2"
+    state: mounted
+
+- name: Create directory tree
+  file:
+    path: "/mnt/filestore/{{ item.path }}"
+    state: directory
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+    mode: "{{ item.mode | default('0755') }}"
+  loop:
+    - { path: "home" }
+    - { path: "shared" }
+    - { path: "shared/data",     group: "{{ shared_group }}", mode: "2775" }
+    - { path: "shared/projects", group: "{{ shared_group }}", mode: "2775" }
+    - { path: "shared/models",   group: "{{ shared_group }}", mode: "2775" }
+
+- name: Default ACLs for shared dirs (group rwx)
+  command: "setfacl -d -m g:{{ shared_group }}:rwx /mnt/filestore/shared/{{ item }}"
+  loop: [ "data", "projects", "models" ]
+  changed_when: false
+
+- name: Unmount Filestore
+  mount:
+    path: /mnt/filestore
+    state: unmounted
+
+

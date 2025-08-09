@@ -1,0 +1,4 @@
+filestore_ip: "{{ lookup('env','FILESTORE_IP') | default('10.0.0.5', true) }}"
+shared_group: "data-engineers"
+
+

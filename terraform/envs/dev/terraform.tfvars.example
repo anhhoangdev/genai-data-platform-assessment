@@ -1,0 +1,35 @@
+# Copy this file to terraform.tfvars and customize for your environment
+
+project_id  = "your-gcp-project-id"
+region      = "us-central1"
+environment = "dev"
+
+# Update with your GitHub repository
+wif = {
+  pool_id               = "github-pool"
+  provider_id           = "github-provider"
+  pool_display_name     = "GitHub Actions Pool"
+  provider_display_name = "GitHub Actions Provider"
+  attribute_condition   = "attribute.repository == \"your-org/your-repo\""
+}
+
+# Customize network configuration if needed
+network = {
+  vpc_name = "vpc-data-platform"
+  subnets = {
+    services = {
+      name                     = "subnet-services"
+      cidr_range              = "10.10.1.0/24"
+      region                  = "us-central1"
+      private_ip_google_access = true
+    }
+    workloads = {
+      name                     = "subnet-workloads"
+      cidr_range              = "10.10.2.0/24"
+      region                  = "us-central1"
+      private_ip_google_access = true
+    }
+  }
+  # Firewall rules, NAT, and DNS settings use defaults from variables.tf
+  # Override them here if customization is needed
+}

@@ -1,0 +1,43 @@
+---
+- name: Install FreeIPA client packages
+  apt:
+    name:
+      - freeipa-client
+      - sssd
+      - oddjob
+      - oddjob-mkhomedir
+      - chrony
+    state: present
+    update_cache: true
+
+- name: Enable pam_mkhomedir
+  lineinfile:
+    path: /etc/pam.d/common-session
+    line: 'session required pam_mkhomedir.so skel=/etc/skel/ umask=0022'
+    insertafter: EOF
+
+- name: Discover GCP project ID via metadata
+  shell: |
+    curl -s -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/project/project-id
+  register: gcp_project
+  changed_when: false
+
+- name: Fetch IPA enrollment OTP from Secret Manager
+  shell: |
+    TOKEN=$(curl -s -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/service-accounts/default/token | jq -r .access_token)
+    curl -s -H "Authorization: Bearer $TOKEN" "https://secretmanager.googleapis.com/v1/projects/{{ gcp_project.stdout }}/secrets/ipa_enrollment_otp/versions/latest:access" | jq -r .payload.data | base64 -d
+  args:
+    executable: /bin/bash
+  register: ipa_enrollment_otp
+  changed_when: false
+
+- name: Join FreeIPA realm if not already joined
+  shell: |
+    set -euo pipefail
+    if ! test -f /etc/ipa/default.conf; then
+      ipa-client-install -U --domain={{ ipa_domain }} --server=ipa.{{ ipa_domain }} --realm={{ ipa_realm }} --principal=enroll --password='{{ ipa_enrollment_otp.stdout }}' --mkhomedir
+    fi
+  args:
+    executable: /bin/bash
+
+

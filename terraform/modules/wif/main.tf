@@ -11,10 +11,10 @@ resource "google_iam_workload_identity_pool_provider" "provider" {
   workload_identity_pool_provider_id = var.provider_id
   display_name                       = var.provider_display_name
   description                        = var.provider_description
-  
+
   attribute_mapping   = var.attribute_mapping
   attribute_condition = var.attribute_condition
-  
+
   oidc {
     issuer_uri = var.issuer_uri
   }

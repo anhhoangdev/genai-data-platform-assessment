@@ -125,8 +125,8 @@ variable "network" {
     vpc_name = string
     subnets = map(object({
       name                     = string
-      cidr_range              = string
-      region                  = string
+      cidr_range               = string
+      region                   = string
       private_ip_google_access = optional(bool, true)
     }))
     firewall_rules = list(object({
@@ -168,14 +168,14 @@ variable "network" {
     subnets = {
       services = {
         name                     = "subnet-services"
-        cidr_range              = "10.10.1.0/24"
-        region                  = "us-central1"
+        cidr_range               = "10.10.1.0/24"
+        region                   = "us-central1"
         private_ip_google_access = true
       }
       workloads = {
         name                     = "subnet-workloads"
-        cidr_range              = "10.10.2.0/24"
-        region                  = "us-central1"
+        cidr_range               = "10.10.2.0/24"
+        region                   = "us-central1"
         private_ip_google_access = true
       }
     }

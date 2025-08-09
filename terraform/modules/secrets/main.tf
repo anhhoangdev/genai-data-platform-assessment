@@ -1,11 +1,11 @@
 resource "google_secret_manager_secret" "secrets" {
   for_each = var.secrets
-  
+
   project   = var.project_id
   secret_id = each.key
-  
+
   labels = each.value.labels
-  
+
   replication {
     user_managed {
       replicas {
@@ -21,13 +21,13 @@ resource "google_secret_manager_secret" "secrets" {
 # Create initial versions for secrets that have initial values
 resource "google_secret_manager_secret_version" "initial_versions" {
   for_each = {
-    for k, v in var.secrets : k => v 
+    for k, v in var.secrets : k => v
     if v.initial_value != null
   }
-  
+
   secret      = google_secret_manager_secret.secrets[each.key].id
   secret_data = each.value.initial_value
-  
+
   lifecycle {
     ignore_changes = [secret_data]
   }
@@ -36,7 +36,7 @@ resource "google_secret_manager_secret_version" "initial_versions" {
 # IAM bindings for secret access
 resource "google_secret_manager_secret_iam_member" "secret_accessors" {
   for_each = local.flattened_iam_bindings
-  
+
   project   = var.project_id
   secret_id = google_secret_manager_secret.secrets[each.value.secret_key].secret_id
   role      = each.value.role

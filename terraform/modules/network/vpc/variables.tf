@@ -18,9 +18,9 @@ variable "subnets" {
   description = "Map of subnets to create"
   type = map(object({
     name                     = string
-    cidr_range              = string
-    region                  = string
-    purpose                 = optional(string)
+    cidr_range               = string
+    region                   = string
+    purpose                  = optional(string)
     private_ip_google_access = optional(bool, true)
     secondary_ranges = optional(list(object({
       range_name    = string

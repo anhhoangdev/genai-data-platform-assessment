@@ -1,0 +1,43 @@
+---
+- name: Ensure autofs is installed
+  apt:
+    name: autofs
+    state: present
+
+- name: Configure auto.master.d for home and shared
+  copy:
+    dest: "/etc/auto.master.d/{{ item.name }}.autofs"
+    content: "{{ item.content }}\n"
+    mode: '0644'
+  loop:
+    - { name: 'home',   content: '/home /etc/auto.home --timeout=600' }
+    - { name: 'shared', content: '/shared /etc/auto.shared --timeout=600' }
+
+- name: Configure auto.home map for per-user homes
+  copy:
+    dest: /etc/auto.home
+    mode: '0644'
+    content: "* -fstype=nfs4,rw,nosuid,hard,intr {{ filestore_ip }}:/home/&\n"
+
+- name: Configure auto.shared map for shared dirs
+  copy:
+    dest: /etc/auto.shared
+    mode: '0644'
+    content: |
+      data     -fstype=nfs4,rw,nosuid,hard,intr {{ filestore_ip }}:/shared/data
+      projects -fstype=nfs4,rw,nosuid,hard,intr {{ filestore_ip }}:/shared/projects
+      models   -fstype=nfs4,rw,nosuid,hard,intr {{ filestore_ip }}:/shared/models
+
+- name: Ensure /shared exists
+  file:
+    path: /shared
+    state: directory
+    mode: '0755'
+
+- name: Restart autofs
+  service:
+    name: autofs
+    state: restarted
+    enabled: true
+
+

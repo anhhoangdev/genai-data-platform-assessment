@@ -1,0 +1,48 @@
+---
+- name: Install code-server
+  shell: |
+    set -euo pipefail
+    curl -fsSL https://code-server.dev/install.sh | sh
+  args:
+    creates: /usr/bin/code-server
+
+- name: Ensure skel systemd user directory exists
+  file:
+    path: /etc/skel/.config/systemd/user
+    state: directory
+    mode: '0755'
+
+- name: Install code-server user unit into skel
+  copy:
+    dest: /etc/skel/.config/systemd/user/code-server.service
+    mode: '0644'
+    content: |
+      [Unit]
+      Description=code-server
+      After=network.target
+
+      [Service]
+      Type=simple
+      ExecStart=/usr/bin/code-server --bind-addr 127.0.0.1:8080 --auth none
+      Restart=always
+
+      [Install]
+      WantedBy=default.target
+
+- name: Install PAM script to enable linger on first login
+  copy:
+    dest: /usr/local/sbin/enable_linger.sh
+    mode: '0755'
+    content: |
+      #!/usr/bin/env bash
+      if [ -n "$PAM_USER" ]; then
+        loginctl enable-linger "$PAM_USER" || true
+      fi
+
+- name: Ensure PAM executes linger script on login
+  lineinfile:
+    path: /etc/pam.d/common-session
+    line: 'session optional pam_exec.so seteuid /usr/local/sbin/enable_linger.sh'
+    insertafter: EOF
+
+

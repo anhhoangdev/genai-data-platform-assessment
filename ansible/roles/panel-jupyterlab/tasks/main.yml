@@ -1,0 +1,45 @@
+---
+- name: Install pipx and jupyterlab
+  apt:
+    name:
+      - pipx
+      - python3-venv
+    state: present
+    update_cache: true
+
+- name: Ensure pipx path configured
+  shell: |
+    set -euo pipefail
+    su -s /bin/bash -c "pipx ensurepath" root
+  args:
+    creates: /root/.local/bin/pipx
+
+- name: Install jupyterlab globally via pipx
+  shell: |
+    set -euo pipefail
+    pipx install jupyterlab || true
+
+- name: Ensure skel systemd user directory exists
+  file:
+    path: /etc/skel/.config/systemd/user
+    state: directory
+    mode: '0755'
+
+- name: Install jupyterlab user unit into skel
+  copy:
+    dest: /etc/skel/.config/systemd/user/jupyterlab.service
+    mode: '0644'
+    content: |
+      [Unit]
+      Description=JupyterLab
+      After=network.target
+
+      [Service]
+      Type=simple
+      ExecStart=/usr/local/bin/jupyter lab --ip=127.0.0.1 --port=8888 --no-browser --NotebookApp.token='' --NotebookApp.password=''
+      Restart=always
+
+      [Install]
+      WantedBy=default.target
+
+

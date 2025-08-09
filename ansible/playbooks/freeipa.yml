@@ -1,0 +1,13 @@
+---
+- name: Configure FreeIPA server
+  hosts: freeipa
+  become: true
+  vars:
+    ipa_domain: corp.internal
+    ipa_realm: CORP.INTERNAL
+    ipa_hostname: ipa
+  roles:
+    - role: common-base
+    - role: freeipa-server
+
+

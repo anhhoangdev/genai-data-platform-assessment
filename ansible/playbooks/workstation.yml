@@ -1,0 +1,16 @@
+---
+- name: Configure workstation nodes
+  hosts: workstations
+  become: true
+  vars:
+    filestore_ip: "{{ lookup('env', 'FILESTORE_IP') | default('nfs.corp.internal', true) }}"
+    ipa_domain: corp.internal
+    ipa_realm: CORP.INTERNAL
+  roles:
+    - role: common-base
+    - role: nfs-client
+    - role: freeipa-client
+    - role: panel-code-server
+    - role: panel-jupyterlab
+
+

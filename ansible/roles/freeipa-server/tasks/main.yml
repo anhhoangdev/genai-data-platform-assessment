@@ -1,0 +1,44 @@
+---
+- name: Install FreeIPA server packages
+  apt:
+    name:
+      - freeipa-server
+      - freeipa-server-dns
+      - chrony
+    state: present
+    update_cache: true
+
+- name: Ensure hostname and hosts entry
+  hostname:
+    name: "{{ ipa_hostname }}.{{ ipa_domain }}"
+
+- name: Disable IPA DNS (Cloud DNS authoritative) - ensure install opts reflect
+  set_fact:
+    ipa_install_opts: "--realm {{ ipa_realm }} --domain {{ ipa_domain }} --hostname {{ ipa_hostname }}.{{ ipa_domain }} --no-dns --no-ntp -U"
+
+- name: Discover GCP project ID via metadata
+  shell: |
+    curl -s -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/project/project-id
+  register: gcp_project
+  changed_when: false
+
+- name: Fetch FreeIPA admin password from Secret Manager
+  shell: |
+    TOKEN=$(curl -s -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/service-accounts/default/token | jq -r .access_token)
+    curl -s -H "Authorization: Bearer $TOKEN" "https://secretmanager.googleapis.com/v1/projects/{{ gcp_project.stdout }}/secrets/freeipa_admin_password/versions/latest:access" | jq -r .payload.data | base64 -d
+  args:
+    executable: /bin/bash
+  register: ipa_admin_password
+  changed_when: false
+
+- name: Run ipa-server-install non-interactively if not already configured
+  shell: |
+    set -euo pipefail
+    if ! systemctl is-active --quiet ipa; then
+      echo "{{ ipa_admin_password.stdout }}" > /root/ipa_admin_password
+      ipa-server-install {{ ipa_install_opts }} -a "{{ ipa_admin_password.stdout }}" -p "{{ ipa_admin_password.stdout }}"
+    fi
+  args:
+    executable: /bin/bash
+
+

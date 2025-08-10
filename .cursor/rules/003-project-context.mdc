@@ -18,27 +18,26 @@ tags: [priorities, deliverables, workflow]
 
 ## Deliverables Map
 
-### Multi-File Reports Structure
+### Multi-File Reports Structure (Assessment Requirements)
 ```
 docs/reports/
 ├── A01/                             # GCP Infrastructure  
-│   ├── report_A01.md               # Main overview (300-500 lines)
-│   ├── report_A01_part01_architecture.md (400-600 lines)
-│   ├── report_A01_part02_deployment.md   (400-600 lines)
-│   ├── report_A01_part03_operations.md   (300-400 lines)
-│   └── report_A01_diagram.md       # Mermaid diagrams
+│   ├── report_A01.md               # Main report (1000-1500 lines)
+│   ├── report_A01_part01_architecture.md (1000-1500 lines)
+│   ├── report_A01_part02_deployment.md   (1000-1500 lines)
+│   ├── report_A01_prompt.md       # Strategic GenAI usage
+│   └── report_A01_part01_prompt.md # Part-specific prompts
 ├── A02/                             # Dask Cluster
-│   ├── report_A02.md               # Main overview
-│   ├── report_A02_part01_architecture.md
-│   ├── report_A02_part02_integration.md
-│   ├── report_A02_part03_performance.md
-│   └── report_A02_diagram.md
+│   ├── report_A02.md               # Main report (1000-1500 lines)
+│   ├── report_A02_part01_architecture.md (1000-1500 lines)
+│   ├── report_A02_part02_integration.md  (1000-1500 lines)
+│   ├── report_A02_prompt.md       # Strategic GenAI usage
+│   └── report_A02_part01_prompt.md
 └── B01/                             # Vector Database Tutorial
-    ├── report_B01.md               # Tutorial overview
-    ├── report_B01_part01_concepts.md
-    ├── report_B01_part02_tools.md
-    ├── report_B01_part03_implementation.md
-    └── report_B01_diagram.md
+    ├── report_B01.md               # Main tutorial (1000-1500 lines)
+    ├── report_B01_part01_implementation.md (1000-1500 lines)
+    ├── report_B01_prompt.md       # Strategic GenAI usage
+    └── report_B01_part01_prompt.md
 ```
 
 ### Centralized GenAI Documentation
@@ -63,11 +62,44 @@ prompt_logs/
 - `dask-cluster/` - A02 compute platform
 - `vector-db-tutorial/` - B01 educational content
 
-### Content Requirements
-- **Total per task**: 1000-1500 lines across 2-10 files
-- **Main report**: 300-500 lines (overview + cross-references)
-- **Part files**: 400-600 lines each (focused technical content)
-- **Prompt files**: Document strategic GenAI usage and decisions
+### Content Requirements (Assessment Standards)
+- **Report specifications**: 1000-1500 lines per report file, 2-10 files per task
+- **Main report**: AT LEAST 1000 lines (comprehensive technical architecture)
+- **Part files**: 1000-1500 lines each (detailed technical content)
+- **Prompt files**: Document strategic GenAI usage and technical planning workflows
+- **Multi-audience accessibility**: Technical content understandable by both engineering teams and business stakeholders
+- **Style compliance**: Must follow ctx_doc_style.md formatting exactly
+
+### Documentation Standards and Technical Communication Requirements
+- **Technical-first documentation**: Comprehensive infrastructure design accessible to both engineering teams AND business stakeholders
+- **Multi-audience technical documentation**: Infrastructure details accessible to both engineering teams and business leaders
+- **Terminology standardization**: Create consistent technical terminology section and use throughout report
+- **Documentation frameworks**: Establish standards for team infrastructure documentation and knowledge sharing
+- **Technical cross-functional communication**: Translates infrastructure complexity for business stakeholders
+- **Clear accountability**: Demonstrates understanding of delivery commitments and timeline management
+- **Stakeholder alignment**: Shows approach for keeping all parties informed about progress
+
+### Technical Visualization and Implementation
+- **Architecture diagrams**: Detailed system integration, component relationships, infrastructure topology
+- **Timeline visualization**: Gantt charts with milestones, dependencies, deployment sequences
+- **Technical coordination charts**: Implementation workflows, system dependencies, integration patterns
+- **Stakeholder materials**: Infrastructure overviews and progress updates for business/executive audiences
+- **Mermaid charts**: For architecture, flows, and system integration diagrams
+- **Technical focus**: Diagrams facilitate engineering coordination and stakeholder understanding
+- **Integration approach**: Include visualizations directly in reports or as supplementary materials
+
+## Assessment Submission Standards
+
+### Deliverable Format Requirements
+- **Primary deliverable format**: report_<task>.md files with technical architecture focus
+- **File naming convention**:
+  - Main files: report_<task>.md (AT LEAST ONE MAIN FILE FOR EACH TASK)
+  - Multiple parts: report_<task>_part01_<part_name>.md
+  - Prompt files: report_<task>_prompt.md or report_<task>_part01_prompt.md
+- **Technical planning prompts**: Include report_<task>_prompt.md showing strategic GenAI usage for technical planning
+- **Task selection**: Minimum one from List A (mandatory), additional from List B (optional)
+- **Supplementary materials**: Code snippets, infrastructure plans, technical diagrams if applicable
+- **GenAI UTILIZATION**: DEMONSTRATE EFFECTIVE USE OF AI TOOLS to meet all technical, architectural and documentation requirements through documented workflows
 
 ## Workflow Expectations
 

@@ -4,120 +4,116 @@ alwaysApply: true
 tags: [priorities, deliverables, workflow]
 ---
 
-# Project Context
+# Project Overview
 
-## Task Priorities
+## Priorities
+### Must Complete
+- **A01** — GCP Infrastructure (Terraform, IAM, VPC, GKE, FreeIPA, NFS)
+- **A02** — Scalable Python Job Cluster (Dask)
+- **B01** — Vector DB Tutorial (internal training)
 
-**Primary Focus (Must Complete):**
-- A01 - GCP Infrastructure (Terraform, IAM, VPC, GKE, FreeIPA, NFS)
-- A02 - Scalable Python Job Cluster using Dask
-- B01 - Vector Database Tutorial (internal training)
+### Optional
+- **A03** — Metaflow ML Pipeline Platform
 
-**Optional (Time Permitting):**
-- A03 - Metaflow ML Pipeline Platform
+---
 
-## Deliverables Map
+## Deliverables
 
-### Multi-File Reports Structure (Assessment Requirements)
+### Report Files (1000–1500 lines each)
 ```
+
 docs/reports/
-├── A01/                             # GCP Infrastructure  
-│   ├── report_A01.md               # Main report (1000-1500 lines)
-│   ├── report_A01_part01_architecture.md (1000-1500 lines)
-│   ├── report_A01_part02_deployment.md   (1000-1500 lines)
-│   ├── report_A01_prompt.md       # Strategic GenAI usage
-│   └── report_A01_part01_prompt.md # Part-specific prompts
-├── A02/                             # Dask Cluster
-│   ├── report_A02.md               # Main report (1000-1500 lines)
-│   ├── report_A02_part01_architecture.md (1000-1500 lines)
-│   ├── report_A02_part02_integration.md  (1000-1500 lines)
-│   ├── report_A02_prompt.md       # Strategic GenAI usage
-│   └── report_A02_part01_prompt.md
-└── B01/                             # Vector Database Tutorial
-    ├── report_B01.md               # Main tutorial (1000-1500 lines)
-    ├── report_B01_part01_implementation.md (1000-1500 lines)
-    ├── report_B01_prompt.md       # Strategic GenAI usage
-    └── report_B01_part01_prompt.md
+A01/  -> report\_A01.md + parts + prompt docs
+A02/  -> report\_A02.md + parts + prompt docs
+B01/  -> report\_B01.md + parts + prompt docs
+
 ```
 
-### Centralized GenAI Documentation
-```
-prompt_logs/
-├── prompt_A01_main.md              # Strategic GenAI overview for A01
-├── prompt_A01_part01_architecture.md
-├── prompt_A01_part02_deployment.md
-├── prompt_A01_part03_operations.md
-├── prompt_A02_main.md              # Strategic GenAI overview for A02
-├── prompt_A02_part01_architecture.md
-├── prompt_A02_part02_integration.md
-├── prompt_A02_part03_performance.md
-├── prompt_B01_main.md              # Strategic GenAI overview for B01
-├── prompt_B01_part01_concepts.md
-├── prompt_B01_part02_tools.md
-└── prompt_B01_part03_implementation.md
+### Prompt Logs
 ```
 
-### Infrastructure Code
-- `terraform/` - A01 infrastructure modules
-- `dask-cluster/` - A02 compute platform
-- `vector-db-tutorial/` - B01 educational content
+prompt\_logs/
+prompt\_<task>*main.md
+prompt*<task>*partXX*<topic>.md
 
-### Content Requirements (Assessment Standards)
-- **Report specifications**: 1000-1500 lines per report file, 2-10 files per task
-- **Main report**: AT LEAST 1000 lines (comprehensive technical architecture)
-- **Part files**: 1000-1500 lines each (detailed technical content)
-- **Prompt files**: Document strategic GenAI usage and technical planning workflows
-- **Multi-audience accessibility**: Technical content understandable by both engineering teams and business stakeholders
-- **Style compliance**: Must follow ctx_doc_style.md formatting exactly
+```
 
-### Documentation Standards and Technical Communication Requirements
-- **Technical-first documentation**: Comprehensive infrastructure design accessible to both engineering teams AND business stakeholders
-- **Multi-audience technical documentation**: Infrastructure details accessible to both engineering teams and business leaders
-- **Terminology standardization**: Create consistent technical terminology section and use throughout report
-- **Documentation frameworks**: Establish standards for team infrastructure documentation and knowledge sharing
-- **Technical cross-functional communication**: Translates infrastructure complexity for business stakeholders
-- **Clear accountability**: Demonstrates understanding of delivery commitments and timeline management
-- **Stakeholder alignment**: Shows approach for keeping all parties informed about progress
+### Code Roots
+- `terraform/` — A01 infra code
+- `dask-cluster/` — A02 compute platform
+- `vector-db-tutorial/` — B01 educational content
 
-### Technical Visualization and Implementation
-- **Architecture diagrams**: Detailed system integration, component relationships, infrastructure topology
-- **Timeline visualization**: Gantt charts with milestones, dependencies, deployment sequences
-- **Technical coordination charts**: Implementation workflows, system dependencies, integration patterns
-- **Stakeholder materials**: Infrastructure overviews and progress updates for business/executive audiences
-- **Mermaid charts**: For architecture, flows, and system integration diagrams
-- **Technical focus**: Diagrams facilitate engineering coordination and stakeholder understanding
-- **Integration approach**: Include visualizations directly in reports or as supplementary materials
+---
 
-## Assessment Submission Standards
+## Documentation Rules
+- Follow `docs/ctx_doc_style.md` format.
+- 1000–1500 lines per report/part.
+- Multi-audience: engineers + business.
+- Include architecture diagrams, Gantt charts, and integration flows (Mermaid).
+- Maintain a consistent terminology section.
 
-### Deliverable Format Requirements
-- **Primary deliverable format**: report_<task>.md files with technical architecture focus
-- **File naming convention**:
-  - Main files: report_<task>.md (AT LEAST ONE MAIN FILE FOR EACH TASK)
-  - Multiple parts: report_<task>_part01_<part_name>.md
-  - Prompt files: report_<task>_prompt.md or report_<task>_part01_prompt.md
-- **Technical planning prompts**: Include report_<task>_prompt.md showing strategic GenAI usage for technical planning
-- **Task selection**: Minimum one from List A (mandatory), additional from List B (optional)
-- **Supplementary materials**: Code snippets, infrastructure plans, technical diagrams if applicable
-- **GenAI UTILIZATION**: DEMONSTRATE EFFECTIVE USE OF AI TOOLS to meet all technical, architectural and documentation requirements through documented workflows
+---
 
-## Workflow Expectations
+## Workflow
+1. **Read Memory Bank** before any work:
+```
+memory-bank/projectbrief.md
+memory-bank/productContext.md
+memory-bank/techContext.md
+memory-bank/systemPatterns.md
+memory-bank/activeContext.md
+memory-bank/progress.md
 
-### Memory Bank First
-**ALWAYS read Memory Bank files before starting any task:**
-- `memory-bank/projectbrief.md`
-- `memory-bank/productContext.md` 
-- `memory-bank/techContext.md`
-- `memory-bank/systemPatterns.md`
-- `memory-bank/activeContext.md`
-- `memory-bank/progress.md`
+```
+2. **Update Planning**:
+- `planning/backlog.md`
+- `planning/decisions/ADR-*.md`
+- `planning/workflow_state.md`
+3. **Prompt Logging**:
+- Log every GenAI interaction in `docs/AI_PROMPT_LOG.md`
+- Store full prompt/response in `prompt_logs/`
 
-### Documentation Standards
-- Follow `docs/ctx_doc_style.md` for all reports and major docs
-- Update `docs/AI_PROMPT_LOG.md` with prompts and decisions per task
-- Keep `planning/backlog.md` and `memory-bank/progress.md` current
+---
 
-### Task Management
-- Update `planning/backlog.md` as tasks progress
-- Document key decisions in `planning/decisions/ADR-*.md`
-- Maintain `workflow_state.md` as project digest
+## Visualization Requirements
+- **Architecture diagrams** — infra topology, integration points.
+- **Timeline** — Gantt chart with milestones & dependencies.
+- **Workflow diagrams** — component interaction & ops flows.
+- Include diagrams inline or in linked `.mmd` files.
+
+## Documentation Standards
+- **Technical-first**: Comprehensive infra design for engineers + business stakeholders.
+- **Multi-audience clarity**: Use plain explanations alongside technical detail.
+- **Terminology consistency**: Create glossary and reuse terms exactly.
+- **Standardized frameworks**: Follow ctx_doc_style.md for all docs.
+- **Cross-functional communication**: Explain complex infra in business-relevant terms.
+- **Accountability**: Show delivery commitments + timeline management.
+- **Stakeholder alignment**: Keep all parties informed on progress.
+
+## Visualization Standards
+- **Architecture diagrams**: Show system integration, components, topology.
+- **Gantt charts**: Milestones, dependencies, deployment sequence.
+- **Coordination charts**: Workflow, dependencies, integration patterns.
+- **Stakeholder visuals**: High-level progress updates for execs.
+- **Mermaid diagrams**: Architecture, flows, integrations.
+- **Integration visuals**: Embed diagrams in reports or attach separately.
+
+## Submission Standards
+- **Main reports**: `report_<task>.md` (≥1000 lines, technical architecture focus).
+- **Part files**: `report_<task>_partXX_<name>.md` (1000–1500 lines each).
+- **Prompt files**: `report_<task>_prompt.md` or per-part prompt files.
+- **AI planning docs**: Show strategic GenAI usage in prompt files.
+- **Task selection**: ≥1 from List A (mandatory), List B optional.
+- **Supplementary materials**: Code snippets, infra plans, diagrams.
+- **GenAI utilization**: Document how AI tools were applied to meet technical + doc standards.
+
+---
+
+## Assessment Checklist
+- [ ] All required files created in correct directories.
+- [ ] Each main report ≥ 1000 lines, with part files also ≥ 1000 lines.
+- [ ] Prompts documented for every task/part.
+- [ ] Memory Bank reviewed before work starts.
+- [ ] Planning and progress docs updated.
+- [ ] Diagrams included (architecture, Gantt, flows).
+```

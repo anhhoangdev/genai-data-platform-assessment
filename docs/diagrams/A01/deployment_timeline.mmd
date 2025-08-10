@@ -1,5 +1,36 @@
 ```mermaid
-%% TODO: Fill with actual diagram content
+gantt
+    title A01 GCP Data Platform - Optimized Deployment Plan
+    dateFormat  YYYY-MM-DD
+    axisFormat  %m/%d
+
+    section Phase 0
+    Foundation Security     :phase0, 2025-01-20, 1d
+
+    section Phase 1
+    Bastion + Network       :p1a, after phase0, 4h
+    FreeIPA VM Provision    :p1b, after p1a, 4h
+    Filestore Provisioning  :p1c, after p1a, 4h
+    Workstation MIG         :p1d, after p1c, 4h
+
+    section Phase 2
+    Bastion Config          :p2a, after p1a, 2h
+    FreeIPA Config          :p2b, after p1b, 4h
+    Workstation Config      :p2c, after p1d, 4h
+
+    section Phase 3
+    Security Audit          :p3a, after p2a, 4h
+    Performance Testing     :p3b, after p2c, 4h
+    Monitoring Setup        :p3c, after p2c, 4h
+    Backup Strategy         :p3d, after p2c, 4h
+    DR Testing              :p3e, after p3d, 4h
+
+    section Phase 4
+    Admin Accounts          :p4a, after p3a, 2h
+    Test Accounts           :p4b, after p4a, 2h
+    Access Validation       :p4c, after p4b, 3h
+    Documentation           :p4d, after p3a, 4h
+    Training                :p4e, after p4d, 4h
 ```
 
 

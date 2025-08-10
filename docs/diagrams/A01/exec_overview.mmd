@@ -1,5 +1,23 @@
 ```mermaid
-%% TODO: Fill with actual diagram content
+graph LR
+  %% Executive Overview (Stakeholder-friendly)
+  Users["Users (20–30 Engineers)"] --> IAP["IAP (Secure Access)"] --> Bastion["Bastion"] --> Workstations["Workstations (MIG)"]
+  Workstations --> Filestore["Filestore (Shared NFS)"]
+  Workstations -. SSO .- FreeIPA["FreeIPA (SSO)"]
+
+  subgraph Security["Security Features"]
+    WIF["WIF (No SA Keys)"]
+    CMEK["CMEK Encryption"]
+    FW["Deny-by-default Firewall"]
+  end
+
+  WIF --- IAP
+  CMEK --- Filestore
+  FW --- Bastion
+  FW --- Workstations
+
+  classDef highlight fill:#f5faff,stroke:#7fb3ff,stroke-width:1px;
+  class IAP,Bastion,Workstations,Filestore,FreeIPA highlight;
 ```
 
 

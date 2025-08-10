@@ -3,7 +3,7 @@
 ## Infrastructure Patterns
 - **Modular Infrastructure**: Separate Terraform modules per component with clear interfaces and proper outputs
 - **Security-First Design**: Zero service account keys, CMEK encryption, deny-by-default networking, IAP-only access
-- **Phased Deployment**: Phase-0 (foundation) → Phase-1 (VMs/services) → Phase-2 (applications) - NOW COMPLETED through Phase-1
+- **Phased Deployment**: Phase-0 (foundation) → Phase-1 (VMs/services) → Documentation - NOW COMPLETED through comprehensive documentation
 - **Infrastructure as Code**: All infrastructure provisioned via Terraform with GitHub Actions CI/CD
 - **Workload Identity Federation**: GitHub Actions authentication without long-lived secrets
 
@@ -34,3 +34,11 @@
 - **Monitoring Integration**: Google Ops Agent on all VMs, structured logging
 - **Scalable Compute**: MIG-based workstations with autoscaling (0-10 instances)
 - **Fault Tolerance**: Multi-zone deployment, health checks, auto-healing policies
+
+## Documentation Patterns
+- **Dual-Audience Reports**: Stakeholder master report with business focus; technical deep-dive for engineers
+- **Embedded Diagrams**: Mermaid charts integrated directly in reports (network, security, coordination, executive overview)
+- **Style Compliance**: Strict adherence to `ctx_doc_style.md` with YAML front matter, details blocks, bullets-only content
+- **Cross-Linking**: Navigation between reports with consistent terminology and file references
+- **Prompt Transparency**: Formatted user-only logs for examiner review of GenAI usage
+- **Visual Communication**: Network topology, security flows, deployment timelines, and stakeholder-friendly overviews

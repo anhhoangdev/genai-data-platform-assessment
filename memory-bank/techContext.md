@@ -8,4 +8,6 @@
 - Data tutorials: Vector DBs (e.g., ChromaDB)
 - Docs: ctx_doc_style; Docusaurus (optional viewer)
 - Local: Linux; Node.js; Python 3.10+
-- Infrastructure Status: Phase-0 foundation deployed and operational
+- Infrastructure Status: A01 complete with Phase-0 foundation + Phase-1 VMs + comprehensive documentation
+- Documentation Status: Master stakeholder report and technical deep-dive with embedded Mermaid diagrams
+- Prompt Logs: Formatted user-only extracts for examiner review and GenAI transparency

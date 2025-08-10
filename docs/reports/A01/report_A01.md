@@ -25,8 +25,8 @@ title: report_A01
   - No service account keys (WIF) and CMEK encryption align with enterprise security and compliance controls
   - Elastic workstation pool supports 20–30 engineers with cost-efficient autoscaling
 - **Diagram**:
-```mermaid
-graph TB
+  ```mermaid
+  graph TB
   subgraph Internet["Users (Corp / VPN)"]
     User["Engineers (20–30)"]
   end
@@ -76,7 +76,6 @@ graph TB
   classDef boundary fill:#f7f7f7,stroke:#bbb,stroke-width:1px;
   class VPC,MGMT,SRV,WS boundary;
 
-```
 ---
 
 </details>
@@ -177,37 +176,37 @@ graph TB
 - **Timeline (Gantt)**:
   ```mermaid
   gantt
-      title A01 GCP Data Platform - Optimized Deployment Plan
-      dateFormat  YYYY-MM-DD
-      axisFormat  %m/%d
+    title A01 GCP Data Platform - Optimized Deployment Plan
+    dateFormat  YYYY-MM-DD
+    axisFormat  %m/%d
 
-      section Phase 0
-      Foundation Security     :phase0, 2025-01-20, 1d
+    section Phase 0
+    Foundation Security     :phase0, 2025-01-20, 1d
 
-      section Phase 1
-      Bastion + Network       :p1a, after phase0, 4h
-      FreeIPA VM Provision    :p1b, after p1a, 4h
-      Filestore Provisioning  :p1c, after p1a, 4h
-      Workstation MIG         :p1d, after p1c, 4h
+    section Phase 1
+    Bastion + Network       :p1a, after phase0, 4h
+    FreeIPA VM Provision    :p1b, after p1a, 4h
+    Filestore Provisioning  :p1c, after p1a, 4h
+    Workstation MIG         :p1d, after p1c, 4h
 
-      section Phase 2
-      Bastion Config          :p2a, after p1a, 2h
-      FreeIPA Config          :p2b, after p1b, 4h
-      Workstation Config      :p2c, after p1d, 4h
+    section Phase 2
+    Bastion Config          :p2a, after p1a, 2h
+    FreeIPA Config          :p2b, after p1b, 4h
+    Workstation Config      :p2c, after p1d, 4h
 
-      section Phase 3
-      Security Audit          :p3a, after p2a, 4h
-      Performance Testing     :p3b, after p2c, 4h
-      Monitoring Setup        :p3c, after p2c, 4h
-      Backup Strategy         :p3d, after p2c, 4h
-      DR Testing              :p3e, after p3d, 4h
+    section Phase 3
+    Security Audit          :p3a, after p2a, 4h
+    Performance Testing     :p3b, after p2c, 4h
+    Monitoring Setup        :p3c, after p2c, 4h
+    Backup Strategy         :p3d, after p2c, 4h
+    DR Testing              :p3e, after p3d, 4h
 
-      section Phase 4
-      Admin Accounts          :p4a, after p3a, 2h
-      Test Accounts           :p4b, after p4a, 2h
-      Access Validation       :p4c, after p4b, 3h
-      Documentation           :p4d, after p3a, 4h
-      Training                :p4e, after p4d, 4h
+    section Phase 4
+    Admin Accounts          :p4a, after p3a, 2h
+    Test Accounts           :p4b, after p4a, 2h
+    Access Validation       :p4c, after p4b, 3h
+    Documentation           :p4d, after p3a, 4h
+    Training                :p4e, after p4d, 4h
   ```
 ---
 
@@ -340,6 +339,22 @@ graph TB
 
 ## Risks
 ---
+### Risk Register (Summary)
+<details>
+<summary>Top risks, impact, and mitigations (stakeholder view)</summary>
+
+---
+- FreeIPA availability: single-server failure could impact logins; mitigation: frequent backups, documented recovery, evaluate warm standby
+- NFS performance bottlenecks under peak load; mitigation: monitor IOPS/latency, scale Filestore tier/capacity, optimize autofs and client mounts
+- Misconfigured IAP/firewall exposing services; mitigation: deny-by-default rules, change review, automated validation checks
+- WIF/OIDC configuration drift breaks CI/CD; mitigation: version-controlled identity settings, validation pipeline, fallback manual deploy SOP
+- Cost overrun from MIG growth; mitigation: autoscaling bounds, usage dashboards, periodic right-sizing reviews
+- Operational error during changes; mitigation: change windows, peer review, staged rollouts, fast rollback via Terraform/Ansible
+---
+
+</details>
+
+ 
 ### Risk Register
 <details>
 <summary>Top risks, impact, and mitigations</summary>
@@ -356,6 +371,16 @@ graph TB
 </details>
 ## Appendices
 ---
+### Related Technical Deep Dive
+<details>
+<summary>Link to full engineering details</summary>
+
+---
+- For complete technical details (network, security, deployment, ops), see: `report_A01_technical.md`
+- This stakeholder report remains focused on outcomes, timelines, and risk posture
+---
+
+</details>
 ### Executive Overview Diagram
 <details>
 <summary>Stakeholder-friendly overview</summary>

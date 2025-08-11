@@ -184,7 +184,7 @@ resource "google_dataproc_cluster" "dev_cluster" {
 
     # Encryption configuration
     encryption_config {
-      gce_pd_kms_key_name = module.kms.crypto_key_id
+      kms_key_name = module.kms.crypto_key_id
     }
   }
 

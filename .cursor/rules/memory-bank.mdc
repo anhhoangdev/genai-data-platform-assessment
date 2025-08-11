@@ -16,12 +16,15 @@ flowchart TD
     PB[projectbrief.md] --> PC[productContext.md]
     PB --> SP[systemPatterns.md]
     PB --> TC[techContext.md]
+    PB --> LC[learningContext.md]
     
     PC --> AC[activeContext.md]
     SP --> AC
     TC --> AC
+    LC --> AC
     
     AC --> P[progress.md]
+    LC --> LL[learning-logs/]
 ```
 
 ### Core Files (Required)
@@ -61,6 +64,12 @@ flowchart TD
    - Current status
    - Known issues
 
+7. `learningContext.md`
+   - Educational objectives and methodologies
+   - Teaching approaches and effectiveness patterns
+   - Tutorial development insights
+   - Knowledge transfer outcomes
+
 ### Additional Context
 Create additional files/folders within memory-bank/ when they help organize:
 - Complex feature documentation
@@ -68,6 +77,16 @@ Create additional files/folders within memory-bank/ when they help organize:
 - API documentation
 - Testing strategies
 - Deployment procedures
+
+### Learning Logs Structure
+The `learning-logs/` directory contains educational effectiveness tracking:
+- `teaching-patterns.md` - Reusable educational approaches and methodologies
+- `learning-metrics.md` - Assessment methods and success indicators
+- `b01-vector-db/` - Specific logs for B01 Vector Database Tutorial:
+  - `concept-progression.md` - Learning pathway and stage dependencies
+  - `exercise-effectiveness.md` - Exercise design and assessment insights
+  - `common-challenges.md` - Student difficulty patterns and solutions
+  - `teaching-insights.md` - Discoveries about effective teaching methods
 
 ## Core Workflows
 

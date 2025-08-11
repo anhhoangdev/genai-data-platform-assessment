@@ -31,7 +31,9 @@ variable "required_services" {
     "file.googleapis.com",
     "iap.googleapis.com",
     "logging.googleapis.com",
-    "monitoring.googleapis.com"
+    "monitoring.googleapis.com",
+    "composer.googleapis.com",
+    "dataproc.googleapis.com"
   ]
 }
 
@@ -65,7 +67,9 @@ variable "service_accounts" {
         "roles/secretmanager.admin",
         "roles/cloudkms.admin",
         "roles/compute.networkAdmin",
-        "roles/dns.admin"
+        "roles/dns.admin",
+        "roles/composer.admin",
+        "roles/dataproc.admin"
       ]
     }
   }

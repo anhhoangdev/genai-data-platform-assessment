@@ -87,3 +87,24 @@ output "phase_1_inputs" {
     }
   }
 }
+
+# Phase 2 outputs (A02)
+output "composer_environment_name" {
+  value       = try(module.composer.name, null)
+  description = "Name of the Cloud Composer environment"
+}
+
+output "composer_dag_gcs_prefix" {
+  value       = try(module.composer.dag_gcs_prefix, null)
+  description = "GCS prefix for Composer DAGs"
+}
+
+output "dataproc_staging_bucket" {
+  value       = try(google_storage_bucket.dataproc_staging.name, null)
+  description = "Name of the Dataproc staging bucket"
+}
+
+output "dev_dataproc_cluster_name" {
+  value       = var.create_dev_dataproc_cluster ? try(google_dataproc_cluster.dev_cluster[0].name, null) : null
+  description = "Name of the development Dataproc cluster (if created)"
+}

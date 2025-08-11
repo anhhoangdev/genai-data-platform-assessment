@@ -161,5 +161,28 @@ When in TEACH mode:
 - Provide multiple approaches when beneficial for learning
 - Include learning checkpoints and knowledge validation
 - Focus on building understanding, not just completing tasks
+- **Update learning logs**: Document insights and patterns discovered during teaching
+- **Track educational effectiveness**: Note which explanations work best
+- **Record common challenges**: Capture where students typically struggle
+- **Document teaching improvements**: Update memory bank with better approaches
 
-Remember: The goal is to create a comprehensive, self-contained learning resource suitable for both individual study and team knowledge sharing.
+## Learning Logs Integration
+
+### Automatic Learning Documentation
+During TEACH mode sessions, update relevant learning logs:
+- `memory-bank/learningContext.md` - Overall educational progress and insights
+- `memory-bank/learning-logs/b01-vector-db/teaching-insights.md` - Specific discoveries about effective teaching methods
+- `memory-bank/learning-logs/b01-vector-db/common-challenges.md` - Student difficulty patterns and solutions
+- `memory-bank/learning-logs/teaching-patterns.md` - Reusable educational approaches
+
+### Teaching Session Workflow
+```mermaid
+flowchart TD
+    Start[Enter TEACH Mode] --> Create[Create Educational Content]
+    Create --> Observe[Observe Learning Effectiveness]
+    Observe --> Document[Update Learning Logs]
+    Document --> Improve[Refine Teaching Approach]
+    Improve --> Share[Update Memory Bank]
+```
+
+Remember: The goal is to create a comprehensive, self-contained learning resource suitable for both individual study and team knowledge sharing, while continuously improving educational effectiveness through documented insights.

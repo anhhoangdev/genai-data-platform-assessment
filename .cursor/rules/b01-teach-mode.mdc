@@ -1,0 +1,165 @@
+---
+description: Teaching mode guidelines for B01 Vector Database Tutorial
+globs: ["docs/reports/B01/**", "vector-db-tutorial/**"]
+alwaysApply: false
+---
+
+# B01 Vector Database Tutorial - TEACH Mode Guidelines
+
+## Teaching Philosophy
+
+When in TEACH mode for the B01 Vector Database Tutorial task, follow these core principles:
+
+### Educational Clarity Standards
+- **Always explain concepts step-by-step in plain language**
+- Start with the "why" before diving into the "how"
+- Use analogies and real-world comparisons to make complex concepts accessible
+- Break down complex topics into digestible chunks
+- Define technical terms before using them extensively
+
+### Code Documentation Standards
+- **When writing code, add inline comments explaining why, not just how**
+- Explain the purpose and reasoning behind each code block
+- Show common patterns and anti-patterns
+- Include performance implications and trade-offs
+- Demonstrate both simple and advanced usage patterns
+
+### Error Handling and Troubleshooting
+- **When showing errors, explain the cause and how to fix it**
+- Provide context for why errors occur
+- Show debugging techniques and diagnostic approaches
+- Include prevention strategies
+- Demonstrate error recovery and resilience patterns
+
+### Interactive Learning Approach
+- **Suggest small exercises after teaching each concept**
+- Design hands-on activities that reinforce learning
+- Provide progressive difficulty levels
+- Include self-assessment checkpoints
+- Create practical scenarios that mirror real-world usage
+
+## B01 Tutorial Structure Framework
+
+### 1. Concept Introduction Phase
+- **Vector Database Definitions**
+  - What are vector databases?
+  - Why do they exist? (problem they solve)
+  - How do they differ from traditional databases?
+  - Real-world use cases and applications
+  - **Exercise**: Identify vector database use cases in your current projects
+
+### 2. Tool Comparison Phase
+- **Popular Vector Database Options**
+  - Feature comparison matrix
+  - Performance characteristics
+  - Pricing and licensing models
+  - Integration ecosystem
+  - **Exercise**: Evaluate tools against specific criteria
+
+### 3. Deep Dive Analysis Phase
+- **Detailed Examination of Selected Tool**
+  - Architecture and design principles
+  - API and query interfaces
+  - Data ingestion and indexing
+  - Search and retrieval mechanisms
+  - **Exercise**: Implement basic operations
+
+### 4. Implementation Guidance Phase
+- **Practical Usage Examples**
+  - Setup and configuration
+  - Data modeling and schema design
+  - Query optimization techniques
+  - Integration patterns
+  - **Exercise**: Build a complete example application
+
+### 5. Best Practices Phase
+- **Optimization and Performance**
+  - Indexing strategies
+  - Query performance tuning
+  - Scaling considerations
+  - Monitoring and observability
+  - **Exercise**: Optimize a poorly performing setup
+
+## Content Creation Guidelines
+
+### Writing Style Requirements
+- Use **simple, direct, plain language approach**
+- Avoid unnecessary jargon and acronyms
+- Write in active voice
+- Use bullet points for clarity
+- Include visual diagrams where helpful
+
+### Code Example Standards
+```python
+# Good: Explains the why and provides context
+# This example demonstrates semantic search using embeddings
+# We're using cosine similarity because it normalizes for vector magnitude
+similarity_scores = cosine_similarity(query_embedding, document_embeddings)
+
+# Bad: Only shows the how
+similarity_scores = cosine_similarity(query_embedding, document_embeddings)
+```
+
+### Exercise Design Principles
+- **Start Simple**: Begin with basic concepts before advancing
+- **Build Incrementally**: Each exercise builds on previous knowledge
+- **Provide Solutions**: Include complete solutions with explanations
+- **Encourage Exploration**: Suggest variations and extensions
+- **Real-World Relevance**: Connect exercises to practical scenarios
+
+### Assessment and Feedback
+- Include self-check questions
+- Provide expected outcomes for exercises
+- Explain common mistakes and how to avoid them
+- Offer troubleshooting guides for stuck learners
+
+## Tutorial Delivery Format
+
+### File Organization
+- Follow project's `ctx_doc_style.md` formatting
+- Use the existing `docs/reports/B01/` structure
+- Maintain consistent cross-referencing
+- Include navigation aids between sections
+
+### Interactive Elements
+- Include "Try This" boxes for hands-on activities
+- Add "Common Pitfalls" warnings
+- Provide "Going Deeper" sections for advanced users
+- Create "Quick Reference" summaries
+
+### Visual Learning Aids
+- Architecture diagrams for complex concepts
+- Flow charts for processes and workflows
+- Comparison tables for tool evaluation
+- Code flow diagrams for complex implementations
+
+## Quality Standards
+
+### Learning Objectives
+Each section must clearly state:
+- What the learner will understand after completion
+- What practical skills they will gain
+- How the knowledge applies to real-world scenarios
+
+### Accessibility
+- Write for multiple skill levels
+- Provide prerequisite knowledge lists
+- Include glossary of terms
+- Offer additional resources for deeper learning
+
+### Validation
+- Test all code examples for correctness
+- Verify exercise solutions work as expected
+- Ensure external links and references are current
+- Check for technical accuracy and best practices
+
+## Mode-Specific Behaviors
+
+When in TEACH mode:
+- Prioritize educational value over implementation speed
+- Explain context and reasoning behind every recommendation
+- Provide multiple approaches when beneficial for learning
+- Include learning checkpoints and knowledge validation
+- Focus on building understanding, not just completing tasks
+
+Remember: The goal is to create a comprehensive, self-contained learning resource suitable for both individual study and team knowledge sharing.

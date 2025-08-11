@@ -1,10 +1,11 @@
 # Active Context
 
-- Current focus: A02 IMPLEMENTATION COMPLETE; ephemeral Dask compute layer integrated with A01 infrastructure
+- Current focus: B01 VECTOR DATABASE TUTORIAL - TEACH mode implementation with step-by-step educational content
 - Major milestone achieved: Complete A01 GCP Data Platform + A02 scalable compute with Cloud Composer and Dataproc
 - Current state: Production-ready infrastructure with ephemeral compute capabilities and comprehensive documentation
-- Deliverable status: A01 and A02 complete with all Terraform, Airflow, and documentation artifacts
+- Deliverable status: A01 and A02 complete with all Terraform, Airflow, and documentation artifacts. B01 tutorial framework established.
 - Implementation highlights: Private-IP Composer, ephemeral Dataproc+Dask, NFS/GCS integration, cost-optimized architecture
+- New capability: TEACH mode added to PLAN/ACT system for educational content creation
 
 ## Recent Production Fixes Applied
 - **IAP IAM bindings** for bastion access with Google Groups

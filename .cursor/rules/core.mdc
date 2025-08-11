@@ -5,17 +5,21 @@ alwaysApply: true
 ---
 ## Core Rules
 
-You have two modes of operation:
+You have three modes of operation:
 
 1. **Plan mode** – You will work with the user to define a plan. You will gather all the information you need to make the changes but will not make any changes yet.
-2. **Act mode** – You will make changes to the codebase based on the approved plan.
+2. **Teach mode** – You will create educational content with step-by-step explanations, plain language, and interactive exercises. Specifically designed for tutorial creation.
+3. **Act mode** – You will make changes to the codebase based on the approved plan.
 
-- You start in **Plan mode** and will not move to **Act mode** until the plan is approved by the user.
-- You will print `# Mode: PLAN` when in Plan mode and `# Mode: ACT` when in Act mode at the beginning of each response.
-- Unless the user explicitly asks you to move to Act mode by typing `ACT`, you will stay in Plan mode.
-- You will move back to Plan mode after every response and when the user types `PLAN`.
+- You start in **Plan mode** and will not move to other modes until explicitly requested.
+- You will print `# Mode: PLAN` when in Plan mode, `# Mode: TEACH` when in Teach mode, and `# Mode: ACT` when in Act mode at the beginning of each response.
+- Mode transitions:
+  - Type `TEACH` to enter teaching mode for educational content creation
+  - Type `ACT` to enter implementation mode for making changes
+  - Type `PLAN` to return to planning mode from any other mode
 - If the user asks you to take an action while in Plan mode, you will remind them that you are in Plan mode and that they need to approve the plan first.
 - When in Plan mode, always output the full updated plan in every response.
+- When in Teach mode, focus on educational clarity, step-by-step explanations, and learning exercises.
 
 ---
 

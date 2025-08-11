@@ -213,41 +213,41 @@ graph TB
 - **Resource Cleanup**: Automatic cluster deletion after job completion
 
 ```mermaid
-sequenceDiagram
-  autonumber
-  participant User as Engineer
-  participant IAP as IAP Proxy
-  participant Composer as Cloud Composer
-  participant Dataproc as Dataproc API
-  participant Cluster as Dask Cluster
-  participant Storage as Storage (NFS/GCS)
-  participant Monitor as Monitoring
+    sequenceDiagram
+    autonumber
+    participant User as Engineer
+    participant IAP as IAP Proxy
+    participant Composer as Cloud Composer
+    participant Dataproc as Dataproc API
+    participant Cluster as Dask Cluster
+    participant Storage as Storage (NFS/GCS)
+    participant Monitor as Monitoring
 
-  Note over User,Monitor: Job Submission Phase
-  User->>IAP: Authenticate via Google Workspace
-  IAP->>Composer: Access Airflow UI
-  User->>Composer: Trigger DAG with parameters
-  Composer->>Dataproc: Create ephemeral cluster
-  Dataproc-->>Composer: Cluster creation success
-  
-  Note over User,Monitor: Job Execution Phase
-  Composer->>Cluster: Submit Dask job
-  Cluster->>Storage: Load input data
-  Storage-->>Cluster: Data chunks
-  Cluster->>Cluster: Distributed processing
-  Cluster->>Storage: Write output data
-  
-  Note over User,Monitor: Monitoring and Access
-  User->>IAP: Request Dask Dashboard
-  IAP->>Cluster: Component Gateway proxy
-  Cluster-->>User: Real-time job progress
-  Cluster->>Monitor: Metrics and logs
-  
-  Note over User,Monitor: Cleanup Phase
-  Cluster-->>Composer: Job completion signal
-  Composer->>Dataproc: Delete cluster
-  Dataproc-->>Composer: Deletion confirmed
-  Composer-->>User: Job completion notification
+    Note over User,Monitor: Job Submission Phase
+    User->>IAP: Authenticate via Google Workspace
+    IAP->>Composer: Access Airflow UI
+    User->>Composer: Trigger DAG with parameters
+    Composer->>Dataproc: Create ephemeral cluster
+    Dataproc-->>Composer: Cluster creation success
+    
+    Note over User,Monitor: Job Execution Phase
+    Composer->>Cluster: Submit Dask job
+    Cluster->>Storage: Load input data
+    Storage-->>Cluster: Data chunks
+    Cluster->>Cluster: Distributed processing
+    Cluster->>Storage: Write output data
+    
+    Note over User,Monitor: Monitoring and Access
+    User->>IAP: Request Dask Dashboard
+    IAP->>Cluster: Component Gateway proxy
+    Cluster-->>User: Real-time job progress
+    Cluster->>Monitor: Metrics and logs
+    
+    Note over User,Monitor: Cleanup Phase
+    Cluster-->>Composer: Job completion signal
+    Composer->>Dataproc: Delete cluster
+    Dataproc-->>Composer: Deletion confirmed
+    Composer-->>User: Job completion notification
 ```
 
 ---

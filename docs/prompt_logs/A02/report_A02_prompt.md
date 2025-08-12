@@ -55,7 +55,6 @@
 ## 8. User Prompt
 
 > I’ve chosen Option B: Dask on Dataproc.
-> Write a detailed LLM prompt that includes my current A01 context, the integration goals, constraints, and expected outputs.
 
 ---
 

@@ -74,11 +74,7 @@
 
 ## 11. User Prompt
 
-> **Context**
->
-> We have an existing secure GCP data platform named **A01** running in a single GCP project.
->
-> **Current Architecture**
+> **Context** cho zalo 1 chút là zalo chịu sự quản lý của PL VN trong khi mạng xã hội nước ngoài vào VN ko chịu sự quản lý nên Zalo không thể cạnh tranh đ
 >
 > * **VPC:** `data-platform` with subnets:
 >
@@ -157,5 +153,3 @@
 >    * Dask dashboard access (Component Gateway, private only).
 >    * GCP Monitoring & Logging integration.
 >    * Alerting on job failures, cluster provisioning errors, and resource saturation.
-
-want me to wrap the other prompt sections the same way?

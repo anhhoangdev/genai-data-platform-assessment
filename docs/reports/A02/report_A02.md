@@ -7,6 +7,10 @@ title: report_A02
 ---
 ## Executive Summary
 ---
+## Technical Deep Dive
+---
+## Production Operations
+---
 ## Architecture Overview
 ---
 ## Implementation Components
@@ -65,6 +69,156 @@ title: report_A02
 - Architecture diagrams: `report_A02_diagram.md`
 - GenAI usage documentation: `../../prompt_logs/A02/report_A02_prompt.md`
 - Integration with A01: Cross-references in architecture sections
+---
+
+</details>
+
+### Technical Deep Dive
+<details>
+<summary>Advanced technical architecture and implementation details</summary>
+
+---
+
+- **Deep technical understanding enables successful implementation**
+- **Advanced configurations optimize performance and reliability**
+- **Best practices drawn from production deployments**
+
+#### Dask Scheduler Architecture
+- **Scheduler Types**: Single-threaded event loop design
+- **Task Graph**: Directed acyclic graph (DAG) optimization
+- **Memory Management**: Reference counting and garbage collection
+- **Communication**: TCP with optional TLS encryption
+- **State Machine**: Task states (waiting, ready, executing, memory, error)
+
+---
+
+#### YARN Integration Details
+- **Application Master**: Dask cluster lifecycle management
+- **Container Allocation**: Dynamic resource negotiation
+- **Queue Configuration**: Fair scheduler with hierarchical queues
+- **Resource Localization**: Efficient file distribution
+- **Example YARN Config**:
+  ```xml
+  <property>
+    <name>yarn.scheduler.capacity.root.dask.capacity</name>
+    <value>70</value>
+  </property>
+  <property>
+    <name>yarn.scheduler.capacity.root.dask.maximum-capacity</name>
+    <value>90</value>
+  </property>
+  <property>
+    <name>yarn.scheduler.capacity.root.dask.user-limit-factor</name>
+    <value>0.5</value>
+  </property>
+  ```
+
+---
+
+#### Network Protocol Optimization
+- **Communication Patterns**: Scatter-gather, all-reduce, broadcast
+- **Serialization**: MessagePack with custom pickle fallback
+- **Compression**: LZ4 for large messages (>10KB)
+- **Buffer Management**: Zero-copy transfers where possible
+- **TCP Tuning**:
+  ```bash
+  # Kernel parameters for high-throughput
+  net.core.rmem_max = 134217728
+  net.core.wmem_max = 134217728
+  net.ipv4.tcp_rmem = 4096 87380 134217728
+  net.ipv4.tcp_wmem = 4096 65536 134217728
+  ```
+
+---
+
+#### Advanced Scheduling Algorithms
+- **Work Stealing**: Dynamic load balancing between workers
+- **Task Prioritization**: Critical path optimization
+- **Data Locality**: Minimize network transfers
+- **Speculative Execution**: Handle straggler tasks
+- **Custom Schedulers**: Plugin architecture for specialized needs
+
+---
+
+</details>
+
+### Production Operations
+<details>
+<summary>Day-2 operations, monitoring, and maintenance procedures</summary>
+
+---
+
+- **Operational excellence ensures platform reliability**
+- **Automated procedures reduce manual overhead**
+- **Proactive monitoring prevents user-impacting issues**
+
+#### Daily Operations Checklist
+- **Morning Review (30 min)**:
+  ```bash
+  # Check overnight job status
+  gcloud dataproc jobs list --filter="status.state=ACTIVE"
+  
+  # Review error logs
+  gcloud logging read "resource.type=cloud_dataproc_cluster 
+    AND severity>=ERROR" --limit=50
+  
+  # Check composer health
+  gcloud composer environments describe composer-prod \
+    --location=us-central1 --format="value(state)"
+  
+  # Verify budget status
+  gcloud billing budgets list --billing-account=$BILLING_ID
+  ```
+
+---
+
+#### Automated Health Checks
+- **Composer Health**: Environment state, DAG parsing errors
+- **Cluster Status**: Active clusters, failed jobs, orphaned resources
+- **Resource Usage**: CPU, memory, disk utilization trends
+- **Cost Tracking**: Daily spend, projected monthly cost
+- **Alert Status**: Outstanding incidents, acknowledgments
+
+---
+
+#### Maintenance Procedures
+- **Weekly Tasks**:
+  - Clear old staging data (>7 days)
+  - Review and optimize slow queries
+  - Update DAG documentation
+  - Security patch assessment
+
+- **Monthly Tasks**:
+  - Composer environment backup
+  - Performance baseline review
+  - Cost optimization analysis
+  - User access audit
+
+---
+
+#### Emergency Procedures
+- **Runaway Job Termination**:
+  ```bash
+  # Find and kill expensive jobs
+  gcloud dataproc jobs list --filter="status.state=ACTIVE" \
+    --format="table(reference.jobId,status.stateStartTime)"
+  
+  # Terminate specific job
+  gcloud dataproc jobs kill $JOB_ID --region=us-central1
+  
+  # Delete associated cluster
+  gcloud dataproc clusters delete $CLUSTER_NAME --region=us-central1
+  ```
+
+- **Cost Control Emergency**:
+  ```bash
+  # Immediate cluster shutdown
+  for cluster in $(gcloud dataproc clusters list \
+    --format="value(clusterName)"); do
+    gcloud dataproc clusters delete $cluster --quiet
+  done
+  ```
+
 ---
 
 </details>

@@ -74,8 +74,6 @@
 
 ## 11. User Prompt
 
-> **Context** cho zalo 1 chút là zalo chịu sự quản lý của PL VN trong khi mạng xã hội nước ngoài vào VN ko chịu sự quản lý nên Zalo không thể cạnh tranh đ
->
 > * **VPC:** `data-platform` with subnets:
 >
 >   * `management` — IAP, Bastion, FreeIPA

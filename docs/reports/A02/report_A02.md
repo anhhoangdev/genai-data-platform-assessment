@@ -463,15 +463,498 @@ title: report_A02
 
 </details>
 
+### Risk Assessment
+<details>
+<summary>Technical and operational risks with mitigation strategies</summary>
+
+---
+
+- **Risk assessment ensures project success and operational stability**
+- **Proactive mitigation reduces impact and likelihood of issues**
+- **Continuous monitoring enables early detection and response**
+
+#### Technical Risks
+- **Risk**: Dask-YARN integration complexity
+  - **Impact**: Delayed deployment, poor performance
+  - **Likelihood**: Medium (new technology combination)
+  - **Mitigation**: Extensive testing, vendor support engagement
+  - **Contingency**: Fall back to native Spark if needed
+
+- **Risk**: Network latency between Dask and Filestore
+  - **Impact**: Slow data processing, timeouts
+  - **Likelihood**: Low (same region deployment)
+  - **Mitigation**: Local caching, data locality optimization
+  - **Contingency**: Use GCS for large datasets
+
+---
+
+#### Operational Risks
+- **Risk**: Runaway compute costs from forgotten clusters
+  - **Impact**: Budget overrun, service suspension
+  - **Likelihood**: High (common issue)
+  - **Mitigation**: Auto-delete after 2 hours idle, budget alerts
+  - **Contingency**: Hard quota limits, emergency shutdown
+
+- **Risk**: User learning curve with Dask
+  - **Impact**: Low adoption, productivity loss
+  - **Likelihood**: Medium (new framework)
+  - **Mitigation**: Training sessions, example notebooks
+  - **Contingency**: Provide Spark alternative
+
+---
+
+#### Security Risks
+- **Risk**: Data exfiltration through notebooks
+  - **Impact**: Data breach, compliance violation
+  - **Likelihood**: Low (private network)
+  - **Mitigation**: Egress monitoring, DLP policies
+  - **Contingency**: Incident response plan
+
+---
+
+#### Integration Risks
+- **Risk**: Composer environment instability
+  - **Impact**: Job scheduling failures
+  - **Likelihood**: Low (managed service)
+  - **Mitigation**: Environment snapshots, monitoring
+  - **Contingency**: Manual cluster management
+
+---
+
+</details>
+
+### User Access Patterns
+<details>
+<summary>Detailed workflows for different user personas</summary>
+
+---
+
+- **Multiple access patterns support diverse user needs**
+- **Clear documentation reduces support burden**
+- **Self-service capabilities improve productivity**
+
+#### Data Scientist Workflow
+  ```mermaid
+  sequenceDiagram
+    participant DS as Data Scientist
+    participant WS as Workstation
+    participant Composer as Composer UI
+    participant Cluster as Dask Cluster
+    participant Storage as Filestore/GCS
+    
+    DS->>WS: SSH login
+    WS->>Storage: Mount /export/home
+    DS->>WS: Develop notebook
+    DS->>Composer: Submit job DAG
+    Composer->>Cluster: Create cluster
+    Cluster->>Storage: Process data
+    Cluster->>DS: Results ready
+    DS->>Storage: Retrieve results
+    Composer->>Cluster: Delete cluster
+  ```
+
+---
+
+#### Data Engineer Workflow
+- **Development**: Local testing with small datasets
+- **Staging**: Submit to small cluster for validation
+- **Production**: Schedule recurring jobs via Airflow
+- **Monitoring**: Track job performance and costs
+
+---
+
+#### ML Engineer Workflow
+- **Training**: Distributed model training on large clusters
+- **Hyperparameter Tuning**: Parallel experiments
+- **Model Serving**: Export to GCS for deployment
+- **A/B Testing**: Compare model versions
+
+---
+
+#### Business Analyst Workflow
+- **SQL Queries**: Through Dask-SQL interface
+- **Reports**: Scheduled notebooks with email delivery
+- **Dashboards**: Connect BI tools to processed data
+- **Ad-hoc Analysis**: Interactive notebooks
+
+---
+
+</details>
+
+### Performance Tuning Guide
+<details>
+<summary>Optimization strategies for different workload types</summary>
+
+---
+
+- **Performance tuning critical for cost efficiency**
+- **Workload-specific optimizations improve throughput**
+- **Continuous profiling identifies bottlenecks**
+
+#### ETL Workload Optimization
+- **Partitioning Strategy**: Match HDFS block size (128MB)
+- **Shuffle Optimization**: Minimize data movement
+- **Caching**: Persist intermediate results
+- **Example Configuration**:
+  ```python
+  # Optimal partition size for 10GB CSV
+  df = dd.read_csv('gs://bucket/data/*.csv', 
+                   blocksize='128MB',
+                   dtype={'col1': 'int32'})
+  
+  # Persist after expensive operations
+  df_filtered = df[df.value > 100].persist()
+  ```
+
+---
+
+#### Machine Learning Optimization
+- **Data Loading**: Use Parquet for faster I/O
+- **Feature Engineering**: Vectorized operations
+- **Model Training**: Distributed algorithms (XGBoost, LightGBM)
+- **Memory Management**: Gradient checkpointing
+- **Example**:
+  ```python
+  # Distributed XGBoost training
+  import xgboost as xgb
+  from dask_ml.model_selection import train_test_split
+  
+  dtrain = xgb.dask.DaskDMatrix(client, X_train, y_train)
+  params = {
+      'tree_method': 'hist',
+      'objective': 'binary:logistic',
+      'eval_metric': 'auc'
+  }
+  model = xgb.dask.train(client, params, dtrain)
+  ```
+
+---
+
+#### Graph Analytics Optimization
+- **Data Structure**: Use sparse matrices
+- **Algorithm Choice**: Pregel-style iterations
+- **Checkpointing**: Save state between iterations
+- **Resource Allocation**: High memory workers
+
+---
+
+#### Real-time Analytics
+- **Streaming Integration**: Kafka → Dask Streams
+- **Window Functions**: Time-based aggregations
+- **State Management**: Redis for persistent state
+- **Latency Target**: Sub-second processing
+
+---
+
+</details>
+
+### Troubleshooting Guide
+<details>
+<summary>Common issues and resolution procedures</summary>
+
+---
+
+- **Quick issue resolution improves user satisfaction**
+- **Known problems documented with solutions**
+- **Diagnostic procedures streamline support**
+
+#### Cluster Creation Failures
+- **Symptom**: "Failed to create cluster" error
+- **Common Causes**:
+  - Quota exceeded
+  - Network configuration issues
+  - IAM permission problems
+- **Diagnosis**:
+  ```bash
+  # Check quotas
+  gcloud compute project-info describe --project=$PROJECT
+  
+  # Verify subnet availability
+  gcloud compute networks subnets describe services \
+    --region=us-central1
+  
+  # Test IAM permissions
+  gcloud iam service-accounts get-iam-policy \
+    dataproc-sa@$PROJECT.iam.gserviceaccount.com
+  ```
+
+---
+
+#### Dask Worker Memory Errors
+- **Symptom**: "Worker exceeded 95% memory" kills
+- **Solutions**:
+  - Reduce partition size
+  - Increase worker memory allocation
+  - Enable spilling to disk
+- **Configuration**:
+  ```yaml
+  # Worker memory settings
+  dask:
+    worker:
+      memory:
+        target: 0.85  # Target 85% memory
+        spill: 0.90   # Spill at 90%
+        pause: 0.95   # Pause at 95%
+        terminate: 0.98  # Kill at 98%
+  ```
+
+---
+
+#### Network Connectivity Issues
+- **Symptom**: Cannot reach Dask dashboard
+- **Checks**:
+  - IAP tunnel active
+  - Component Gateway enabled
+  - Firewall rules correct
+- **Fix**:
+  ```bash
+  # Restart IAP tunnel
+  gcloud compute ssh dataproc-master \
+    --tunnel-through-iap \
+    -- -L 8787:localhost:8787
+  ```
+
+---
+
+#### Job Performance Issues
+- **Symptom**: Jobs running slower than expected
+- **Analysis Tools**:
+  - Dask performance report
+  - Cloud Monitoring metrics
+  - YARN resource manager
+- **Common Fixes**:
+  - Rebalance data partitions
+  - Increase parallelism
+  - Use better data formats
+
+---
+
+</details>
+
+### Cost Management Strategies
+<details>
+<summary>Advanced cost optimization and budget control</summary>
+
+---
+
+- **Cost management ensures sustainable platform operation**
+- **Automated controls prevent budget overruns**
+- **Optimization reduces costs without impacting performance**
+
+#### Budget Configuration
+- **Project Budget**: $5,000/month with alerts at 50%, 80%, 100%
+- **Per-User Quotas**: Maximum 20 cluster-hours/month
+- **Department Allocation**: Tagged resources for chargeback
+- **Example Setup**:
+  ```bash
+  # Create budget with alerts
+  gcloud billing budgets create \
+    --billing-account=$BILLING_ACCOUNT \
+    --display-name="A02-Dask-Platform" \
+    --budget-amount=5000 \
+    --threshold-rule=percent=50 \
+    --threshold-rule=percent=80,basis=forecasted
+  ```
+
+---
+
+#### Preemptible Instance Strategy
+- **Use Cases**: Batch processing, fault-tolerant jobs
+- **Cost Savings**: 60-90% vs on-demand
+- **Configuration**:
+  ```python
+  # Dataproc cluster with preemptible workers
+  cluster_config = {
+      "master_config": {
+          "num_instances": 1,
+          "machine_type_uri": "n2-standard-4"
+      },
+      "worker_config": {
+          "num_instances": 2,
+          "machine_type_uri": "n2-standard-4",
+          "preemptibility": "PREEMPTIBLE",
+          "min_num_instances": 2
+      }
+  }
+  ```
+
+---
+
+#### Autoscaling Optimization
+- **Scale-down Aggressiveness**: 2 minutes idle
+- **Scale-up Threshold**: 80% CPU for 1 minute
+- **Graceful Shutdown**: 30-second task drainage
+- **Cost Impact**: 40-60% reduction in compute costs
+
+---
+
+#### Storage Lifecycle Management
+- **Staging Data**: Delete after 7 days
+- **Job Outputs**: Move to Nearline after 30 days
+- **Logs**: Compress after 7 days, archive after 30
+- **Savings**: $200-500/month on storage
+
+---
+
+</details>
+
+### Security Best Practices
+<details>
+<summary>Security hardening and compliance procedures</summary>
+
+---
+
+- **Security best practices protect sensitive data**
+- **Compliance requirements met through design**
+- **Regular audits ensure continued protection**
+
+#### Data Encryption
+- **In Transit**: TLS 1.3 for all connections
+- **At Rest**: CMEK encryption for all storage
+- **Processing**: Encrypted shuffle with Dask
+- **Key Management**: Automated rotation every 90 days
+
+---
+
+#### Access Control
+- **Authentication**: FreeIPA integration via SASL
+- **Authorization**: YARN queues with ACLs
+- **Job Isolation**: Separate YARN applications
+- **Audit Trail**: All actions logged to Cloud Logging
+
+---
+
+#### Network Security
+- **Private IPs**: No public exposure
+- **Firewall Rules**: Explicit allow only
+- **VPC Service Controls**: Data exfiltration prevention
+- **Cloud NAT**: Controlled egress with logging
+
+---
+
+#### Compliance Controls
+- **HIPAA**: Encryption and access controls
+- **SOC2**: Audit logging and monitoring
+- **GDPR**: Data residency and deletion
+- **PCI**: Network segmentation
+
+---
+
+</details>
+
+### Training Materials
+<details>
+<summary>User training resources and documentation</summary>
+
+---
+
+- **Comprehensive training accelerates adoption**
+- **Self-service resources reduce support load**
+- **Regular workshops maintain skills current**
+
+#### Getting Started Guide
+- **Prerequisites**: Python knowledge, GCP basics
+- **First Job**: Simple word count example
+- **Common Patterns**: ETL, ML, analytics templates
+- **Troubleshooting**: FAQ and common errors
+
+---
+
+#### Video Tutorials
+- **Platform Overview** (10 min): Architecture and capabilities
+- **First Dask Job** (15 min): Step-by-step walkthrough
+- **Performance Tuning** (20 min): Optimization strategies
+- **Cost Management** (10 min): Budget and monitoring
+
+---
+
+#### Workshop Series
+- **Week 1**: Introduction to Distributed Computing
+- **Week 2**: Dask Fundamentals and Best Practices
+- **Week 3**: Advanced Topics and Optimization
+- **Week 4**: Real-world Use Cases and Q&A
+
+---
+
+#### Reference Documentation
+- **API Guide**: Common Dask operations
+- **Code Examples**: Repository of patterns
+- **Architecture Docs**: Deep technical details
+- **Support Channels**: Slack, email, office hours
+
+---
+
+</details>
+
+### Future Enhancements
+<details>
+<summary>Roadmap for platform evolution and capabilities</summary>
+
+---
+
+- **Platform designed for continuous improvement**
+- **User feedback drives feature prioritization**
+- **Technology advances incorporated regularly**
+
+#### Quarter 1 Roadmap
+- **GPU Support**: Add GPU-enabled workers for ML
+- **Notebook Integration**: JupyterHub with Dask
+- **Workflow Templates**: Pre-built DAGs for common tasks
+- **Cost Analytics**: Detailed per-job cost attribution
+
+---
+
+#### Quarter 2 Roadmap
+- **Multi-Region**: Disaster recovery capability
+- **Ray Integration**: Alternative distributed framework
+- **AutoML Pipeline**: Automated model training
+- **Data Catalog**: Metadata management system
+
+---
+
+#### Quarter 3 Roadmap
+- **Kubernetes Mode**: Dask on GKE option
+- **Streaming**: Real-time processing capabilities
+- **Feature Store**: Centralized feature management
+- **MLOps**: Model versioning and deployment
+
+---
+
+#### Long-term Vision
+- **Serverless Dask**: Zero-management option
+- **Cross-Cloud**: AWS and Azure support
+- **AI Optimization**: ML-driven resource allocation
+- **Quantum Ready**: Integration with quantum computing
+
+---
+
+</details>
+
 ### References
 <details>
 <summary>Additional resources and documentation</summary>
 
 ---
+#### Internal Documentation
+- **Architecture Details**: `report_A02_part01_architecture.md`
+- **Diagrams**: `report_A02_diagram.md`
+- **GenAI Usage**: `../../prompt_logs/A02/report_A02_prompt.md`
+- **A01 Integration**: Cross-references throughout
+
 #### External Resources
 - [Cloud Composer Documentation](https://cloud.google.com/composer/docs)
 - [Dataproc Dask Integration](https://cloud.google.com/dataproc/docs/tutorials/dask)
 - [Dask on YARN Guide](https://yarn.dask.org/)
 - [GCP Private IP Configuration](https://cloud.google.com/vpc/docs/configure-private-google-access)
+- [Dask Best Practices](https://docs.dask.org/en/latest/best-practices.html)
+- [YARN Resource Management](https://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/YARN.html)
+
+#### Community Resources
+- **Dask Discourse**: https://dask.discourse.group/
+- **GCP Slack**: https://googlecloud-community.slack.com/
+- **Stack Overflow**: [google-cloud-dataproc] + [dask] tags
+- **GitHub Examples**: https://github.com/dask/dask-examples
+
+---
 
 </details>

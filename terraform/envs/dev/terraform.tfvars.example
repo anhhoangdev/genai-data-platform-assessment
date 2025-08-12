@@ -1,35 +1,143 @@
-# Copy this file to terraform.tfvars and customize for your environment
+# Mock terraform.tfvars for local testing
+# DO NOT USE IN PRODUCTION - Contains dummy values for validation only
 
-project_id  = "your-gcp-project-id"
+project_id  = "mock-project-id-12345"
 region      = "us-central1"
 environment = "dev"
 
-# Update with your GitHub repository
+# GitHub WIF configuration (mock values)
 wif = {
   pool_id               = "github-pool"
   provider_id           = "github-provider"
   pool_display_name     = "GitHub Actions Pool"
   provider_display_name = "GitHub Actions Provider"
-  attribute_condition   = "attribute.repository == \"your-org/your-repo\""
+  attribute_condition   = "attribute.repository == \"mock-org/mock-repo\""
 }
 
-# Customize network configuration if needed
+# Network configuration (using defaults)
 network = {
   vpc_name = "vpc-data-platform"
   subnets = {
     services = {
       name                     = "subnet-services"
-      cidr_range              = "10.10.1.0/24"
-      region                  = "us-central1"
+      cidr_range               = "10.10.1.0/24"
+      region                   = "us-central1"
       private_ip_google_access = true
     }
     workloads = {
       name                     = "subnet-workloads"
-      cidr_range              = "10.10.2.0/24"
-      region                  = "us-central1"
+      cidr_range               = "10.10.2.0/24"
+      region                   = "us-central1"
       private_ip_google_access = true
     }
   }
-  # Firewall rules, NAT, and DNS settings use defaults from variables.tf
-  # Override them here if customization is needed
+  firewall_rules = [
+    {
+      name          = "deny-all-ingress"
+      direction     = "INGRESS"
+      priority      = 65534
+      source_ranges = ["0.0.0.0/0"]
+      deny = [{
+        protocol = "all"
+      }]
+      target_tags = []
+    },
+    {
+      name          = "allow-internal"
+      direction     = "INGRESS"
+      priority      = 1000
+      source_ranges = ["10.10.0.0/16"]
+      allow = [{
+        protocol = "all"
+      }]
+      target_tags = []
+    },
+    {
+      name          = "allow-iap-ssh"
+      direction     = "INGRESS"
+      priority      = 1000
+      source_ranges = ["35.235.240.0/20"]
+      allow = [{
+        protocol = "tcp"
+        ports    = ["22"]
+      }]
+      target_tags = ["ssh-accessible"]
+    }
+  ]
+  nat = {
+    router_name = "router-data-platform"
+    nat_name    = "nat-data-platform"
+  }
+  dns = {
+    private_zones = {
+      corp = {
+        name        = "corp-internal"
+        dns_name    = "corp.internal."
+        description = "Private DNS zone for internal services"
+      }
+    }
+    dns_records = {}
+  }
 }
+
+# KMS configuration
+kms = {
+  keyring_name = "data-platform-keyring"
+  key_name     = "data-platform-key"
+}
+
+# Service accounts configuration
+service_accounts = {
+  tf_cicd = {
+    display_name = "Terraform CI/CD Service Account"
+    description  = "Service account for Terraform deployments via GitHub Actions"
+    roles = [
+      "roles/serviceusage.serviceUsageAdmin",
+      "roles/iam.serviceAccountAdmin",
+      "roles/iam.workloadIdentityPoolAdmin",
+      "roles/secretmanager.admin",
+      "roles/cloudkms.admin",
+      "roles/compute.networkAdmin",
+      "roles/dns.admin"
+    ]
+  }
+}
+
+# Required GCP services
+required_services = [
+  "compute.googleapis.com",
+  "container.googleapis.com",
+  "iam.googleapis.com",
+  "cloudkms.googleapis.com",
+  "secretmanager.googleapis.com",
+  "dns.googleapis.com",
+  "file.googleapis.com",
+  "iap.googleapis.com"
+]
+
+# Secrets configuration
+secrets = {
+  freeipa_admin_password = {
+    labels = {
+      service = "freeipa"
+      type    = "admin-password"
+    }
+  }
+  freeipa_directory_manager_password = {
+    labels = {
+      service = "freeipa"
+      type    = "directory-manager-password"
+    }
+  }
+  freeipa_enrollment_otp = {
+    labels = {
+      service = "freeipa"
+      type    = "enrollment-otp"
+    }
+  }
+}
+
+# Phase 1 variables
+iap_tunnel_group = "test-group@example.com"
+bastion_instance_name = "bastion-01"
+bastion_zone = "us-central1-a"

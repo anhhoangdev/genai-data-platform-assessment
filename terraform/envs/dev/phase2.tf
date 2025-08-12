@@ -76,7 +76,7 @@ resource "google_storage_bucket" "dataproc_staging" {
   location = var.region
 
   uniform_bucket_level_access = true
-  
+
   encryption {
     default_kms_key_name = module.kms.crypto_key_id
   }
@@ -129,7 +129,7 @@ resource "google_dataproc_cluster" "dev_cluster" {
       internal_ip_only = true
       service_account  = module.phase2_service_accounts.service_accounts["sa_dataproc_runtime"].email
       tags             = ["dataproc"]
-      
+
       metadata = {
         # NFS mount configuration
         nfs_server      = module.filestore.ip_address
@@ -141,7 +141,7 @@ resource "google_dataproc_cluster" "dev_cluster" {
     master_config {
       num_instances = 1
       machine_type  = "n2-standard-4"
-      
+
       disk_config {
         boot_disk_type    = "pd-balanced"
         boot_disk_size_gb = 100
@@ -151,7 +151,7 @@ resource "google_dataproc_cluster" "dev_cluster" {
     worker_config {
       num_instances = 2
       machine_type  = "n2-standard-4"
-      
+
       disk_config {
         boot_disk_type    = "pd-balanced"
         boot_disk_size_gb = 100

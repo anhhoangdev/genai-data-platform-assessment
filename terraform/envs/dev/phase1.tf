@@ -50,52 +50,52 @@ resource "google_secret_manager_secret_iam_member" "ipa_enrollment_otp_access" {
 
 # Bastion instance
 module "bastion" {
-  source               = "../../modules/bastion"
-  name                 = var.bastion.name
-  zone                 = var.bastion.zone
-  subnetwork_self_link = local.services_subnet_self_link
-  machine_type         = var.bastion.machine_type
+  source                = "../../modules/bastion"
+  name                  = var.bastion.name
+  zone                  = var.bastion.zone
+  subnetwork_self_link  = local.services_subnet_self_link
+  machine_type          = var.bastion.machine_type
   service_account_email = module.phase1_service_accounts.service_accounts["sa_bastion"].email
-  additional_tags      = var.bastion.additional_tags
+  additional_tags       = var.bastion.additional_tags
 }
 
 # FreeIPA VM
 module "freeipa" {
-  source               = "../../modules/freeipa_vm"
-  name                 = var.freeipa.name
-  hostname             = var.freeipa.hostname
-  domain               = var.freeipa.domain
-  realm                = var.freeipa.realm
-  region               = var.region
-  zone                 = var.freeipa.zone
-  subnetwork_self_link = local.services_subnet_self_link
-  machine_type         = var.freeipa.machine_type
+  source                = "../../modules/freeipa_vm"
+  name                  = var.freeipa.name
+  hostname              = var.freeipa.hostname
+  domain                = var.freeipa.domain
+  realm                 = var.freeipa.realm
+  region                = var.region
+  zone                  = var.freeipa.zone
+  subnetwork_self_link  = local.services_subnet_self_link
+  machine_type          = var.freeipa.machine_type
   service_account_email = module.phase1_service_accounts.service_accounts["sa_freeipa"].email
-  additional_tags      = var.freeipa.additional_tags
+  additional_tags       = var.freeipa.additional_tags
 }
 
 # Filestore NFS
 module "filestore" {
-  source              = "../../modules/filestore"
-  project_id          = var.project_id
-  location            = var.region
-  name                = var.filestore.name
-  tier                = var.filestore.tier
-  capacity_home_gb    = var.filestore.capacity_home_gb
-  capacity_shared_gb  = var.filestore.capacity_shared_gb
-  vpc_name            = module.vpc.vpc_name
-  reserved_ip_range   = var.filestore.reserved_ip_range
-  allowed_cidrs       = [local.workloads_cidr, local.services_cidr]
+  source             = "../../modules/filestore"
+  project_id         = var.project_id
+  location           = var.region
+  name               = var.filestore.name
+  tier               = var.filestore.tier
+  capacity_home_gb   = var.filestore.capacity_home_gb
+  capacity_shared_gb = var.filestore.capacity_shared_gb
+  vpc_name           = module.vpc.vpc_name
+  reserved_ip_range  = var.filestore.reserved_ip_range
+  allowed_cidrs      = [local.workloads_cidr, local.services_cidr]
 }
 
 # Workstation instance template
 module "workstation_template" {
-  source               = "../../modules/instance_template_workstation"
-  name_prefix          = var.workstation.name_prefix
-  machine_type         = var.workstation.machine_type
-  subnetwork_self_link = local.workloads_subnet_self_link
+  source                = "../../modules/instance_template_workstation"
+  name_prefix           = var.workstation.name_prefix
+  machine_type          = var.workstation.machine_type
+  subnetwork_self_link  = local.workloads_subnet_self_link
   service_account_email = module.phase1_service_accounts.service_accounts["sa_workstation"].email
-  additional_tags      = var.workstation.additional_tags
+  additional_tags       = var.workstation.additional_tags
 }
 
 # Workstation MIG
